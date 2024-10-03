@@ -30,6 +30,9 @@ const QuestsPage: React.FC = () => {
   const [selectedQuests, setSelectedQuests] = useState<Quest[]>([]);
   const [randomQuest, setRandomQuest] = useState<Quest>()
   const [userInput, setUserInput] = useState('');
+  const [loading, setLoading] = useState<true | false>(true)
+  const [apiError, setApiError] = useState<true | false>(false)
+  const [isVictoryPopupVisible, setIsVictoryPopupVisible] = useState(false);
 
   const fetchQuests = async () => {
     try {
@@ -45,11 +48,13 @@ const QuestsPage: React.FC = () => {
     setQuests(data);
   } catch (error) {
     console.error('Erro ao buscar quests:', error);
+    setApiError(true)
   }
 };
 
   useEffect(() => {
     fetchQuests();
+    setLoading(false)
   }, []);
 
 
@@ -75,9 +80,14 @@ const QuestsPage: React.FC = () => {
     const questToAdd = findSelectedQuestColorsAndArrows(quest)
     setSelectedQuests(prevQuests => [...prevQuests, questToAdd]);
     setUserInput('')
-    console.log(quest)
     setQuests(prevQuests => prevQuests.filter(q => q.Name !== quest.Name));
     setFilteredQuests([]);
+    // checks win
+    if (randomQuest) {
+      if (randomQuest.Name === quest.Name) {
+        setIsVictoryPopupVisible(true)
+      }
+    }
   };
 
   const findSelectedQuestColorsAndArrows = (quest: Quest) => {
@@ -89,6 +99,7 @@ const QuestsPage: React.FC = () => {
     let releasedateColorToReturn = 'py-2 border-b border-gray-600 text-center bg-red-500'
     let seriesColorToReturn = 'py-2 border-b border-gray-600 text-center bg-red-500'
     let questPointsArrow = ''
+    let releaseDateArrow = ''
     if (quest?.Difficulty === randomQuest?.Difficulty) {
       difficultyColorToReturn = 'py-2 border-b border-gray-600 text-center bg-green-500'
     }
@@ -106,7 +117,7 @@ const QuestsPage: React.FC = () => {
     }
     if (randomQuest) {
       questPointsArrow = quest['Quest Points'] > (randomQuest['Quest Points'] || 0) ? '↓' : quest['Quest Points'] < (randomQuest['Quest Points'] || 0) ? '↑' : '';
-      console.log(quest['Quest Points'] === randomQuest['Quest Points'])
+      releaseDateArrow = Date.parse(quest['Release Date']) > (Date.parse(randomQuest['Release Date']) || 0) ? '↓' : Date.parse(quest['Release Date']) < (Date.parse(randomQuest['Release Date']) || 0) ? '↑' : '';
       if (quest['Quest Points'] === randomQuest['Quest Points']) {
         questpointsColorToReturn = 'py-2 border-b border-gray-600 text-center bg-green-500'
       }
@@ -131,15 +142,23 @@ const QuestsPage: React.FC = () => {
       'Release DateColor': releasedateColorToReturn,
       SeriesColor: seriesColorToReturn,
       'Quest PointsArrow': questPointsArrow,
-      'Release DateArrow': '',
+      'Release DateArrow': releaseDateArrow,
     }
     return questDataToReturn
   }
 
+  if (loading) {
+    return <div className="w-screen h-screen bg-darkBackground text-white flex items-center justify-center">Loading...</div>;
+  }
+
+  if (apiError) {
+    return <div className="w-screen h-screen bg-darkBackground text-white flex items-center justify-center">API Error</div>;
+  }
+  
   return (
     <div className="flex flex-col items-center min-h-screen bg-darkBackground text-lightGray p-6">
-      <div className='flex flex-col items-center justify-center w-[100%] relative z-0'>
-        <div className='flex flex-col items-center justify-center w-[100%]'>
+      <div className='flex flex-col items-center justify-center w-full relative'>
+        <div className='flex flex-col items-center justify-center w-full '>
           <h1 className="text-4xl font-bold mb-4" style={{ color: '#E1C12B' }}>
             Quests
           </h1>
@@ -151,7 +170,7 @@ const QuestsPage: React.FC = () => {
               placeholder="Guess the quest name"
             />
         </div>
-        <div className="bg-gray-700 rounded-lg w-full max-w-md shadow-lg mb-4 max-h-[150px] overflow-auto">
+        <div className="bg-gray-700 rounded-lg w-full max-w-md shadow-lg mb-4 max-h-[120px] overflow-auto">
           {filteredQuests.length > 0 && (
             <ul>
               {filteredQuests.map(quest => (
@@ -167,34 +186,80 @@ const QuestsPage: React.FC = () => {
           )}
         </div>
       </div>
-      <div className='flex flex-col items-center justify-center w-[100%]'>
+      <div className='flex flex-col items-center justify-center w-full absolute mt-60 bg-darkBackground py-4'>
         {selectedQuests.length > 0 && (
-          <table className="bg-gray-800 text-lightGray border border-gray-600 w-[85%]">
-            <thead>
-              <tr>
-                <th className="py-2 border-b border-gray-600">Name</th>
-                <th className="py-2 border-b border-gray-600">Difficulty</th>
-                <th className="py-2 border-b border-gray-600">Length</th>
-                <th className="py-2 border-b border-gray-600">Quest Points</th>
-                <th className="py-2 border-b border-gray-600">Release Date</th>
-                <th className="py-2 border-b border-gray-600">Series</th>
-              </tr>
-            </thead>
-            <tbody>
-              {selectedQuests && selectedQuests.map(quest => 
-                <tr key={quest.ID} className="hover:bg-gray-700 divide-x-2">
-                  <td className={quest.NameColor}>{quest.Name}</td>
-                  <td className={quest.DifficultyColor}>{quest.Difficulty}</td>
-                  <td className={quest.LengthColor}>{quest.Length}</td>
-                  <td className={quest['Quest PointsColor']}>{quest['Quest Points']}</td>
-                  <td className={quest['Release DateColor']}>{quest['Release Date']}</td>
-                  <td className={quest.SeriesColor}>{quest.Series}</td>
+          <div className="flex flex-col w-[85%] justify-center">
+            <table className="bg-gray-800 text-lightGray border border-gray-600">
+              <thead>
+                <tr>
+                  <th className="py-2 border-b border-gray-600">Name</th>
+                  <th className="py-2 border-b border-gray-600">Difficulty</th>
+                  <th className="py-2 border-b border-gray-600">Length</th>
+                  <th className="py-2 border-b border-gray-600">Quest Points</th>
+                  <th className="py-2 border-b border-gray-600">Release Date</th>
+                  <th className="py-2 border-b border-gray-600">Series</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {selectedQuests && selectedQuests.toReversed().map(quest => 
+                  {
+                    return <tr key={quest.ID} className="hover:bg-gray-700 divide-x-2">
+                      <td className={quest.NameColor}>{quest.Name}</td>
+                      <td className={quest.DifficultyColor}>{quest.Difficulty}</td>
+                      <td className={quest.LengthColor}>{quest.Length}</td>
+                      <td className={quest['Quest PointsColor']}>
+                        <div className='flex flex-row space-between justify-evenly'>
+                          <div>
+                            {quest['Quest PointsArrow']}
+                          </div>
+                          <div>
+                            {quest['Quest Points']}
+                          </div>
+                          <div>
+                            {quest['Quest PointsArrow']}
+                          </div>
+                        </div>
+                      </td>
+                      <td className={quest['Release DateColor']}>
+                        <div className='flex flex-row space-between justify-evenly'>
+                          <div>
+                            {quest['Release DateArrow']}
+                          </div>
+                          <div>
+                            {quest['Release Date']}
+                          </div>
+                          <div>
+                            {quest['Release DateArrow']}
+                          </div>
+                        </div>
+                      </td>
+                      <td className={quest.SeriesColor}>{quest.Series}</td>
+                    </tr>;
+                  }
+                )}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
+      {isVictoryPopupVisible && (
+      <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70">
+        <div className="bg-gray-800 p-8 rounded-lg shadow-lg text-center">
+          <h2 className="text-3xl font-bold text-lightGray mb-4">
+            Congratulations!
+          </h2>
+          <p className="text-lg text-lightGray">
+            You've guessed the quest correctly!
+          </p>
+          <button
+            onClick={() => router.push('/monsters')}
+            className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    )}
     </div>
   );
 };
