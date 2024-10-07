@@ -2,7 +2,7 @@
 
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { release } from 'os';
+
 
 interface Quest {
   Difficulty: string;
@@ -156,92 +156,76 @@ const QuestsPage: React.FC = () => {
   }
   
   return (
-    <div className="flex flex-col items-center min-h-screen bg-darkBackground text-lightGray p-6">
-      <div className='flex flex-col items-center justify-center w-full relative'>
-        <div className='flex flex-col items-center justify-center w-full '>
-          <h1 className="text-4xl font-bold mb-4" style={{ color: '#E1C12B' }}>
-            Quests
-          </h1>
-          <input
-              type="text"
-              value={userInput}
-              onChange={handleInputChange}
-              className="mb-4 px-4 py-2 border rounded-lg bg-gray-800 text-lightGray focus:outline-none w-[34%]"
-              placeholder="Guess the quest name"
-            />
-        </div>
-        <div className="bg-gray-700 rounded-lg w-full max-w-md shadow-lg mb-4 max-h-[120px] overflow-auto">
-          {filteredQuests.length > 0 && (
-            <ul>
-              {filteredQuests.map(quest => (
-                <li
-                  key={quest.ID}
-                  onClick={() => handleQuestSelect(quest)}
-                  className="cursor-pointer hover:bg-gray-600 p-2"
-                >
-                  {quest.Name}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+    <div className="flex flex-col items-center min-h-screen bg-darkBackground text-lightGray p-6 w-full">
+      <div className='flex flex-col items-center justify-center w-full '>
+        <h1 className="text-4xl font-bold mb-4" style={{ color: '#E1C12B' }}>
+          Quests
+        </h1>
+        <input
+            type="text"
+            value={userInput}
+            onChange={handleInputChange}
+            className="mb-4 px-4 py-2 border rounded-lg bg-gray-800 text-lightGray focus:outline-none"
+            placeholder="Guess the quest name"
+          />
       </div>
-      <div className='flex flex-col items-center justify-center w-full absolute mt-60 bg-darkBackground py-4'>
-        {selectedQuests.length > 0 && (
-          <div className="flex flex-col w-[85%] justify-center">
-            <table className="bg-gray-800 text-lightGray border border-gray-600">
-              <thead>
-                <tr>
-                  <th className="py-2 border-b border-gray-600">Name</th>
-                  <th className="py-2 border-b border-gray-600">Difficulty</th>
-                  <th className="py-2 border-b border-gray-600">Length</th>
-                  <th className="py-2 border-b border-gray-600">Quest Points</th>
-                  <th className="py-2 border-b border-gray-600">Release Date</th>
-                  <th className="py-2 border-b border-gray-600">Series</th>
+      {filteredQuests.length > 0 && (
+      <div className="bg-gray-700 rounded-lg w-full max-w-md shadow-lg mb-4 max-h-[120px] overflow-auto z-10">
+          <ul>
+            {filteredQuests.map(quest => (
+              <li
+                key={quest.ID}
+                onClick={() => handleQuestSelect(quest)}
+                className="cursor-pointer hover:bg-gray-600 p-2"
+              >
+                {quest.Name}
+              </li>
+            ))}
+          </ul>
+      </div>
+      )}
+      {selectedQuests.length > 0 && (
+      <div className="fixed flex flex-col items-center w-full top-40 z-0">
+        <div className="overflow-auto max-h-96 w-[85%]">
+          <table className="bg-gray-800 text-lightGray border border-hidden table-auto w-full">
+            <thead className='sticky top-0 bg-gray-800 border-hidden'>
+              <tr>
+                <th className="py-2 border-b border-gray-600">Name</th>
+                <th className="py-2 border-b border-gray-600">Difficulty</th>
+                <th className="py-2 border-b border-gray-600">Length</th>
+                <th className="py-2 border-b border-gray-600">Quest Points</th>
+                <th className="py-2 border-b border-gray-600">Release Date</th>
+                <th className="py-2 border-b border-gray-600">Series</th>
+              </tr>
+            </thead>
+            <tbody>
+              {selectedQuests && selectedQuests.toReversed().map(quest => (
+                <tr key={quest.ID} className="hover:bg-gray-700 divide-x-2">
+                  <td className={quest.NameColor}>{quest.Name}</td>
+                  <td className={quest.DifficultyColor}>{quest.Difficulty}</td>
+                  <td className={quest.LengthColor}>{quest.Length}</td>
+                  <td className={quest['Quest PointsColor']}>
+                    <div className='flex flex-row justify-evenly'>
+                      <div>{quest['Quest PointsArrow']}</div>
+                      <div>{quest['Quest Points']}</div>
+                      <div>{quest['Quest PointsArrow']}</div>
+                    </div>
+                  </td>
+                  <td className={quest['Release DateColor']}>
+                    <div className='flex flex-row justify-evenly'>
+                      <div>{quest['Release DateArrow']}</div>
+                      <div>{quest['Release Date']}</div>
+                      <div>{quest['Release DateArrow']}</div>
+                    </div>
+                  </td>
+                  <td className={quest.SeriesColor}>{quest.Series}</td>
                 </tr>
-              </thead>
-              <tbody>
-                {selectedQuests && selectedQuests.toReversed().map(quest => 
-                  {
-                    return <tr key={quest.ID} className="hover:bg-gray-700 divide-x-2">
-                      <td className={quest.NameColor}>{quest.Name}</td>
-                      <td className={quest.DifficultyColor}>{quest.Difficulty}</td>
-                      <td className={quest.LengthColor}>{quest.Length}</td>
-                      <td className={quest['Quest PointsColor']}>
-                        <div className='flex flex-row space-between justify-evenly'>
-                          <div>
-                            {quest['Quest PointsArrow']}
-                          </div>
-                          <div>
-                            {quest['Quest Points']}
-                          </div>
-                          <div>
-                            {quest['Quest PointsArrow']}
-                          </div>
-                        </div>
-                      </td>
-                      <td className={quest['Release DateColor']}>
-                        <div className='flex flex-row space-between justify-evenly'>
-                          <div>
-                            {quest['Release DateArrow']}
-                          </div>
-                          <div>
-                            {quest['Release Date']}
-                          </div>
-                          <div>
-                            {quest['Release DateArrow']}
-                          </div>
-                        </div>
-                      </td>
-                      <td className={quest.SeriesColor}>{quest.Series}</td>
-                    </tr>;
-                  }
-                )}
-              </tbody>
-            </table>
-          </div>
-        )}
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
+      )}
       {isVictoryPopupVisible && (
       <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70">
         <div className="bg-gray-800 p-8 rounded-lg shadow-lg text-center">
@@ -251,8 +235,11 @@ const QuestsPage: React.FC = () => {
           <p className="text-lg text-lightGray">
             You've guessed the quest correctly!
           </p>
+          <p className="text-lg text-lightGray">
+            The quest was {randomQuest?.Name}, released in {randomQuest?.['Release Date']}
+          </p>
           <button
-            onClick={() => router.push('/monsters')}
+            onClick={() => router.push('/monster')}
             className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
           >
             Next
@@ -260,6 +247,14 @@ const QuestsPage: React.FC = () => {
         </div>
       </div>
     )}
+      <div className='fixed bottom-4'>
+        <button
+          onClick={() => router.push('/')}
+          className="px-6 py-3 bg-darkGreen text-lightGray rounded-lg shadow-lg hover:bg-green-600 transition"
+        >
+          Back
+        </button>
+      </div>
     </div>
   );
 };
