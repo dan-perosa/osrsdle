@@ -71,19 +71,33 @@ const EquipmentsPage: React.FC = () => {
     const [loading, setLoading] = useState<true | false>(true)
     const [apiError, setApiError] = useState<true | false>(false)
     const [isVictoryPopupVisible, setIsVictoryPopupVisible] = useState(false);
+    const [firstHint, setFirstHint] = useState<string | null>(null)
+    const [isFirstHintPopupVisible, setIsFirstHintPopupVisible] = useState<true | false>(false)
+    const [firstHintButtonVisible, setFirstHintButtonVisible] = useState<true | false>(false)
+    const [secondHint, setSecondHint] = useState<string | null>(null)
+    const [secondHintButtonVisible, setSecondHintButtonVisible] = useState<true | false>(false) 
+    const [isSecondHintPopupVisible, setIsSecondHintPopupVisible] = useState<true | false>(false)
+    const [thirdHint, setThirdHint] = useState<string | null>(null)
+    const [thirdHintButtonVisible, setThirdHintButtonVisible] = useState<true | false>(false) 
+    const [isThirdHintPopupVisible, setIsThirdHintPopupVisible] = useState<true | false>(false)
   
     const fetchEquipments = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:5000/equipments/', {
+      const response = await fetch('http://127.0.0.1:5000/equipments/', {
             mode: 'cors',
             method: 'GET',
           });
       const data = await response.json();
-      const randomIndex = Math.floor(Math.random() * data.length);
-      const randomEquipment = data[randomIndex];
-      setRandomEquipment(randomEquipment)
-      console.log(randomEquipment)
       setEquipments(data);
+
+      const response2 = await fetch('http://127.0.0.1:5000/daily_equipment/', {
+            mode: 'cors',
+            method: 'GET',
+          });
+      const data2 = await response2.json();
+      setRandomEquipment(data2)
+      console.log(data2)
+
     } catch (error) {
       console.error('Erro ao buscar equipamentos:', error);
       setApiError(true)
@@ -124,7 +138,49 @@ const EquipmentsPage: React.FC = () => {
     if (randomEquipment && randomEquipment.id === equipment.id) {
         setIsVictoryPopupVisible(true)
     }
+    // checks hints
+    else if (selectedEquipments.length > 10 && selectedEquipments.length < 20) {
+      setFirstHintButtonVisible(true)
+    }
+
+    else if (selectedEquipments.length >= 20 && selectedEquipments.length < 30) {
+      setSecondHintButtonVisible(true)
+    }
+
+    else if (selectedEquipments.length >= 30) {
+      setThirdHintButtonVisible(true)
+    }
     };
+
+    const getFirstHint = () => {
+      const twoFirstLetters = randomEquipment && randomEquipment?.equipment_name[0] + randomEquipment?.equipment_name[1]
+      const formatedFirstHint = `The first two letters of the equipment name are '${twoFirstLetters}'`
+      setFirstHint(formatedFirstHint)
+      setIsFirstHintPopupVisible(true)
+    }
+
+    const getSecondHint = () => {
+      const equipmentNameWordsSplited = randomEquipment?.equipment_name.split(' ')
+      const numberOfLettersInWords = equipmentNameWordsSplited && equipmentNameWordsSplited.map(word => word.length).join(', ')
+      const formatedSecondHint = `The equipment name has ${equipmentNameWordsSplited?.length} words with ${numberOfLettersInWords} letters respectively`
+      setSecondHint(formatedSecondHint)
+      setIsSecondHintPopupVisible(true)
+    }
+
+    const getThirdHint = () => {
+      let formatedThirdHint = ''
+      if (randomEquipment?.equipment_name.includes('(')) {
+        const splitedFirstParenthesis = randomEquipment.equipment_name.split('(', 2)[1]
+        const splitedSecondParenthesis = splitedFirstParenthesis.split(')', 2)[0]
+        formatedThirdHint = `The equipment name includes () and the first parenthesis contains "${splitedSecondParenthesis}"`
+      } else {
+        const equipmentNameArray = randomEquipment?.equipment_name.split(' ') 
+        const lastEquipmentNameWord = equipmentNameArray && equipmentNameArray[equipmentNameArray.length - 1]
+        formatedThirdHint = `The equipment name does not include () and the last word is ${lastEquipmentNameWord}`
+      }
+      setThirdHint(formatedThirdHint)
+      setIsThirdHintPopupVisible(true)
+    }
 
     const red = 'py-2 border-b border-gray-600 text-center bg-red-500'
     const green = 'py-2 border-b border-gray-600 text-center bg-green-500'
@@ -432,7 +488,7 @@ const EquipmentsPage: React.FC = () => {
         </div>
         )}
         {isVictoryPopupVisible && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70">
+        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70 z-20">
           <div className="bg-gray-800 p-8 rounded-lg shadow-lg text-center">
             <h2 className="text-3xl font-bold text-lightGray mb-4">
               Congratulations!
@@ -444,21 +500,107 @@ const EquipmentsPage: React.FC = () => {
               The equipment was {randomEquipment?.equipment_name}
             </p>
             <button
-              onClick={() => router.push('/equipments')}
+              onClick={() => router.push('/')}
               className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
             >
-              Next
+              Finish
             </button>
           </div>
         </div>
       )}
-        <div className='fixed bottom-4'>
-          <button
-            onClick={() => router.push('/')}
-            className="px-6 py-3 bg-darkGreen text-lightGray rounded-lg shadow-lg hover:bg-green-600 transition"
-          >
-            Back
-          </button>
+        {isFirstHintPopupVisible && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70 z-20">
+          <div className="bg-gray-800 p-8 rounded-lg shadow-lg text-center">
+            <h2 className="text-3xl font-bold text-lightGray mb-4">
+              The hint is
+            </h2>
+            <p className="text-lg text-lightGray">
+              {firstHint}
+            </p>
+            <button
+              onClick={() => setIsFirstHintPopupVisible(false)}
+              className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+        {isSecondHintPopupVisible && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70 z-20">
+          <div className="bg-gray-800 p-8 rounded-lg shadow-lg text-center">
+            <h2 className="text-3xl font-bold text-lightGray mb-4">
+              The hint is
+            </h2>
+            <p className="text-lg text-lightGray">
+              {secondHint}
+            </p>
+            <button
+              onClick={() => setIsSecondHintPopupVisible(false)}
+              className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+        {isThirdHintPopupVisible && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70 z-20">
+          <div className="bg-gray-800 p-8 rounded-lg shadow-lg text-center">
+            <h2 className="text-3xl font-bold text-lightGray mb-4">
+              The hint is
+            </h2>
+            <p className="text-lg text-lightGray">
+              {thirdHint}
+            </p>
+            <button
+              onClick={() => setIsThirdHintPopupVisible(false)}
+              className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+        <div className='flex flex-row items-center justify-center fixed bottom-4 gap-4'>
+          <div>
+            <button
+              onClick={() => router.push('/')}
+              className="px-6 py-3 bg-darkGreen text-lightGray rounded-lg shadow-lg hover:bg-green-600 transition"
+            >
+              Back
+            </button>
+          </div>
+          {firstHintButtonVisible && (
+          <div>
+            <button
+              onClick={() => getFirstHint()}
+              className="px-6 py-3 bg-darkGreen text-lightGray rounded-lg shadow-lg hover:bg-green-600 transition"
+            >
+              Hint 1
+            </button>
+          </div>
+          )}
+          {secondHintButtonVisible && (
+          <div>
+            <button
+              onClick={() => getSecondHint()}
+              className="px-6 py-3 bg-darkGreen text-lightGray rounded-lg shadow-lg hover:bg-green-600 transition"
+            >
+              Hint 2
+            </button>
+          </div>
+          )}
+          {thirdHintButtonVisible && (
+          <div>
+            <button
+              onClick={() => getThirdHint()}
+              className="px-6 py-3 bg-darkGreen text-lightGray rounded-lg shadow-lg hover:bg-green-600 transition"
+            >
+              Hint 3
+            </button>
+          </div>
+          )}
         </div>
       </div>
     );

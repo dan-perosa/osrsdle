@@ -74,16 +74,20 @@ const MonstersPage: React.FC = () => {
 
     const fetchMonsters = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:5000/monsters/', {
+      const response = await fetch('http://127.0.0.1:5000/monsters/', {
             mode: 'cors',
             method: 'GET',
           });
       const data = await response.json();
-      const randomIndex = Math.floor(Math.random() * data.length);
-      const randomMonster = data[randomIndex];
-      setRandomMonster(randomMonster)
-      console.log(randomMonster)
       setMonsters(data);
+
+      const response2 = await fetch('http://127.0.0.1:5000/daily_monster/', {
+            mode: 'cors',
+            method: 'GET',
+          });
+      const data2 = await response2.json();
+      setRandomMonster(data2)
+      console.log(data2)
     } catch (error) {
       console.error('Erro ao buscar monstros:', error);
       setApiError(true)

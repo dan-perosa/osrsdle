@@ -41,11 +41,19 @@ const QuestsPage: React.FC = () => {
           method: 'GET',
         });
     const data = await response.json();
-    const randomIndex = Math.floor(Math.random() * data.length);
-    const randomQuest = data[randomIndex];
-    setRandomQuest(randomQuest)
-    console.log(randomQuest)
     setQuests(data);
+  } catch (error) {
+    console.error('Erro ao buscar quests:', error);
+    setApiError(true)
+  }
+    try {
+      const response = await fetch('http://127.0.0.1:5000/daily_quest/', {
+          mode: 'cors',
+          method: 'GET',
+        });
+    const data = await response.json();
+    setRandomQuest(data)
+    console.log(data)
   } catch (error) {
     console.error('Erro ao buscar quests:', error);
     setApiError(true)
@@ -239,7 +247,7 @@ const QuestsPage: React.FC = () => {
             The quest was {randomQuest?.Name}, released in {randomQuest?.['Release Date']}
           </p>
           <button
-            onClick={() => router.push('/monster')}
+            onClick={() => router.push('/monsters')}
             className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
           >
             Next
