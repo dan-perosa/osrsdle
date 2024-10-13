@@ -79,7 +79,8 @@ const MonstersPage: React.FC = () => {
             method: 'GET',
           });
       const data = await response.json();
-      setMonsters(data);
+      const sortedData = data.sort((a: Monster, b: Monster) => (a.monster_name > b.monster_name) ? 1 : ((b.monster_name > a.monster_name) ? -1 : 0))
+      setMonsters(sortedData);
 
       const response2 = await fetch('http://127.0.0.1:5000/daily_monster/', {
             mode: 'cors',

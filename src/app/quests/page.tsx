@@ -41,7 +41,8 @@ const QuestsPage: React.FC = () => {
           method: 'GET',
         });
     const data = await response.json();
-    setQuests(data);
+    const sortedData = data.sort((a: Quest, b: Quest) => (a.Name > b.Name) ? 1 : ((b.Name > a.Name) ? -1 : 0))
+    setQuests(sortedData);
   } catch (error) {
     console.error('Erro ao buscar quests:', error);
     setApiError(true)
@@ -255,13 +256,15 @@ const QuestsPage: React.FC = () => {
         </div>
       </div>
     )}
-      <div className='fixed bottom-4'>
-        <button
-          onClick={() => router.push('/')}
-          className="px-6 py-3 bg-darkGreen text-lightGray rounded-lg shadow-lg hover:bg-green-600 transition"
-        >
-          Back
-        </button>
+      <div className='flex flex-row items-center justify-center fixed bottom-4 gap-4'>
+        <div>
+          <button
+            onClick={() => router.push('/')}
+            className="px-6 py-3 bg-darkGreen text-lightGray rounded-lg shadow-lg hover:bg-green-600 transition"
+          >
+            Back
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -88,7 +88,8 @@ const EquipmentsPage: React.FC = () => {
             method: 'GET',
           });
       const data = await response.json();
-      setEquipments(data);
+      const sortedData = data.sort((a: Equipment, b: Equipment) => (a.equipment_name > b.equipment_name) ? 1 : ((b.equipment_name > a.equipment_name) ? -1 : 0))
+      setEquipments(sortedData);
 
       const response2 = await fetch('http://127.0.0.1:5000/daily_equipment/', {
             mode: 'cors',
