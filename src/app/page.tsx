@@ -55,19 +55,19 @@ const HomePage: React.FC = () => {
           showEquipment ? 'translate-y-0' : 'translate-y-[400%]'
         }`}
       >
-        <button onClick={() => handleEquipmentTypeClick('feet')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Feet</button>
-        <button onClick={() => handleEquipmentTypeClick('legs')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Legs</button>
-        <button onClick={() => handleEquipmentTypeClick('hands')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Hands</button>
+        <button onClick={() => handleEquipmentTypeClick('equipments')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">All equipments (hard)</button>     
         <button onClick={() => handleEquipmentTypeClick('ammunition')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Ammunition</button>
+        <button onClick={() => handleEquipmentTypeClick('body')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Body</button>
+        <button onClick={() => handleEquipmentTypeClick('cape')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Cape</button>
+        <button onClick={() => handleEquipmentTypeClick('feet')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Feet</button>
+        <button onClick={() => handleEquipmentTypeClick('hands')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Hands</button>
+        <button onClick={() => handleEquipmentTypeClick('head')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Head</button>
+        <button onClick={() => handleEquipmentTypeClick('legs')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Legs</button>
         <button onClick={() => handleEquipmentTypeClick('neck')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Neck</button>
         <button onClick={() => handleEquipmentTypeClick('ring')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Ring</button>
-        <button onClick={() => handleEquipmentTypeClick('two-handed')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Two-handed</button>
         <button onClick={() => handleEquipmentTypeClick('shield')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Shield</button>
-        <button onClick={() => handleEquipmentTypeClick('body')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Body</button>
-        <button onClick={() => handleEquipmentTypeClick('head')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Head</button>
+        <button onClick={() => handleEquipmentTypeClick('two-handed')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Two-handed</button>
         <button onClick={() => handleEquipmentTypeClick('weapon')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Weapon</button>
-        <button onClick={() => handleEquipmentTypeClick('cape')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Cape</button>
-        <button onClick={() => handleEquipmentTypeClick('equipments')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">All equipments (hard)</button>     
       </div>
     </div>
   );

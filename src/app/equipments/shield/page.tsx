@@ -80,14 +80,14 @@ const EquipmentsPage: React.FC = () => {
   
     const fetchEquipments = async () => {
       try {
-      const response = await fetch('http://127.0.0.1:5000/equipments/cape', {
+      const response = await fetch('http://127.0.0.1:5000/equipments/shield', {
             mode: 'cors',
             method: 'GET',
           });
       const data = await response.json();
       setEquipments(data);
 
-      const response2 = await fetch('http://127.0.0.1:5000/daily_cape_equipment/', {
+      const response2 = await fetch('http://127.0.0.1:5000/daily_shield_equipment/', {
             mode: 'cors',
             method: 'GET',
           });
@@ -295,7 +295,7 @@ const EquipmentsPage: React.FC = () => {
       <div className="flex flex-col items-center min-h-screen bg-darkBackground text-lightGray p-6 w-full">
         <div className='flex flex-col items-center justify-center w-full '>
           <h1 className="text-4xl font-bold mb-4" style={{ color: '#E1C12B' }}>
-            Cape Slot Equipment
+            Shield Slot Equipment
           </h1>
           <input
               type="text"

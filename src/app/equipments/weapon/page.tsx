@@ -56,6 +56,9 @@ interface Equipment {
   weight: number;
   weight_color: string;
   weight_arrow: string;
+  speed: number | string;
+  speed_color: string;
+  speed_arrow: string;
 }
 
 const EquipmentsPage: React.FC = () => {
@@ -80,14 +83,14 @@ const EquipmentsPage: React.FC = () => {
   
     const fetchEquipments = async () => {
       try {
-      const response = await fetch('http://127.0.0.1:5000/equipments/cape', {
+      const response = await fetch('http://127.0.0.1:5000/equipments/weapon', {
             mode: 'cors',
             method: 'GET',
           });
       const data = await response.json();
       setEquipments(data);
 
-      const response2 = await fetch('http://127.0.0.1:5000/daily_cape_equipment/', {
+      const response2 = await fetch('http://127.0.0.1:5000/daily_weapon_equipment/', {
             mode: 'cors',
             method: 'GET',
           });
@@ -202,14 +205,25 @@ const EquipmentsPage: React.FC = () => {
         let magicDamageColorToReturn = (equipment?.magic_damage === randomEquipment?.magic_damage) ? green : red
         let prayerColorToReturn = (equipment?.prayer === randomEquipment?.prayer) ? green : red
         let weightColorToReturn = (equipment?.weight === randomEquipment?.weight) ? green : red
+        let speedColorToReturn = (equipment?.speed === randomEquipment?.speed) ? green : red
         
         const equipmentNameWords = equipment.equipment_name.split('(')[0]
         const onlyEquipmentNameWords = equipmentNameWords.split(' ').filter(m => m !== '')
+        console.log(onlyEquipmentNameWords)
         onlyEquipmentNameWords.map(word => {
             if (randomEquipment && randomEquipment.equipment_name.includes(word.toLowerCase()) && equipmentNameColorToReturn === red) {
                 equipmentNameColorToReturn = orange
             }
         })
+
+        let equipmentSpeedChecker = equipment.speed
+        if (equipmentSpeedChecker === 'N/A') {
+          equipmentSpeedChecker = 0
+        }
+        let randomEquipmentSpeedChecker = randomEquipment && randomEquipment.speed
+        if (randomEquipmentSpeedChecker === 'N/A') {
+          randomEquipmentSpeedChecker = 0
+        }
 
       let stabAttackArrowToReturn = equipment.stab_attack > (randomEquipment?.stab_attack || 0) ? '↓' : equipment.stab_attack < (randomEquipment?.stab_attack || 0) ? '↑' : '';
       let slashAttackArrowToReturn = equipment.slash_attack > (randomEquipment?.slash_attack || 0) ? '↓' : equipment.slash_attack < (randomEquipment?.slash_attack || 0) ? '↑' : '';
@@ -226,6 +240,7 @@ const EquipmentsPage: React.FC = () => {
       let magicDamageArrowToReturn = equipment.magic_damage > (randomEquipment?.magic_damage || 0) ? '↓' : equipment.magic_damage < (randomEquipment?.magic_damage || 0) ? '↑' : '';
       let prayerArrowToReturn = equipment.prayer > (randomEquipment?.prayer || 0) ? '↓' : equipment.prayer < (randomEquipment?.prayer || 0) ? '↑' : '';
       let weightArrowToReturn = equipment.weight > (randomEquipment?.weight || 0) ? '↓' : equipment.weight < (randomEquipment?.weight || 0) ? '↑' : '';
+      let speedArrowToReturn = equipmentSpeedChecker > (randomEquipmentSpeedChecker || 0) ? '↓' : equipmentSpeedChecker < (randomEquipmentSpeedChecker || 0) ? '↑' : '';
       
       const EquipmentDataToReturn: Equipment = {
         id: equipment.id,
@@ -279,6 +294,9 @@ const EquipmentsPage: React.FC = () => {
         weight: equipment.weight,
         weight_color: weightColorToReturn,
         weight_arrow: weightArrowToReturn,
+        speed: equipment.speed,
+        speed_color: speedColorToReturn,
+        speed_arrow: speedArrowToReturn,
       }
       return EquipmentDataToReturn
     }
@@ -295,7 +313,7 @@ const EquipmentsPage: React.FC = () => {
       <div className="flex flex-col items-center min-h-screen bg-darkBackground text-lightGray p-6 w-full">
         <div className='flex flex-col items-center justify-center w-full '>
           <h1 className="text-4xl font-bold mb-4" style={{ color: '#E1C12B' }}>
-            Cape Slot Equipment
+            Weapon Slot Equipment
           </h1>
           <input
               type="text"
@@ -344,6 +362,7 @@ const EquipmentsPage: React.FC = () => {
                   <th className="py-2 border-b border-gray-600">Magic Damage</th>
                   <th className="py-2 border-b border-gray-600">Prayer</th>
                   <th className="py-2 border-b border-gray-600">Weight</th>
+                  <th className="py-2 border-b border-gray-600">Speed</th>
                 </tr>
               </thead>
               <tbody>
@@ -459,6 +478,13 @@ const EquipmentsPage: React.FC = () => {
                         <div>{equipment.weight_arrow}</div>
                         <div>{equipment.weight}</div>
                         <div>{equipment.weight_arrow}</div>
+                      </div>
+                    </td>
+                    <td className={equipment.speed_color}>
+                      <div className='flex flex-row justify-evenly'>
+                        <div>{equipment.speed_arrow}</div>
+                        <div>{equipment.speed}</div>
+                        <div>{equipment.speed_arrow}</div>
                       </div>
                     </td>
                   </tr>
