@@ -198,8 +198,9 @@ const MonstersPage: React.FC = () => {
         
         const monsterNameWords = monster.monster_name.split('(')[0]
         const onlyMonsterNameWords = monsterNameWords.split(' ').filter(m => m !== '')
+        console.log(onlyMonsterNameWords)
         onlyMonsterNameWords.map(word => {
-            if (randomMonster && randomMonster.monster_name.includes(word.toLowerCase()) && monsterNameColorToReturn === red) {
+            if (randomMonster && randomMonster.monster_name.toLowerCase().includes(word.toLowerCase()) && monsterNameColorToReturn === red) {
                 monsterNameColorToReturn = orange
             }
         })

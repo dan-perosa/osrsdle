@@ -211,7 +211,7 @@ const EquipmentsPage: React.FC = () => {
         const onlyEquipmentNameWords = equipmentNameWords.split(' ').filter(m => m !== '')
         console.log(onlyEquipmentNameWords)
         onlyEquipmentNameWords.map(word => {
-            if (randomEquipment && randomEquipment.equipment_name.includes(word.toLowerCase()) && equipmentNameColorToReturn === red) {
+            if (randomEquipment && randomEquipment.equipment_name.toLowerCase().includes(word.toLowerCase()) && equipmentNameColorToReturn === red) {
                 equipmentNameColorToReturn = orange
             }
         })
