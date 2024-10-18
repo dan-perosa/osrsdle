@@ -55,28 +55,13 @@ interface Equipment {
 }
 
 type SearchBarProps = {
-  title: string;
-  userInput: string;
-  handleInputChange: ChangeEventHandler;
   filteredEquipments: Equipment[];
   handleEquipmentSelect: (equipment: Equipment) => void;
 };
 
-export const Button = ({ title, userInput, handleInputChange, filteredEquipments, handleEquipmentSelect }: SearchBarProps) => {
+export const SearchBar = ({ filteredEquipments, handleEquipmentSelect }: SearchBarProps) => {
   return (
 <div>
-  <div className='flex flex-col items-center justify-center w-full '>
-    <h1 className="text-4xl font-bold mb-4" style={{ color: '#E1C12B' }}>
-      Ammunition Slot Equipment
-    </h1>
-    <input
-        type="text"
-        value={userInput}
-        onChange={handleInputChange}
-        className="mb-4 px-4 py-2 border rounded-lg bg-gray-800 text-lightGray focus:outline-none"
-        placeholder="Guess the equipment name"
-      />
-  </div>
   {filteredEquipments.length > 0 && (
   <div className="bg-gray-700 rounded-lg w-full max-w-md shadow-lg mb-4 max-h-[120px] overflow-auto z-10">
     <ul>
