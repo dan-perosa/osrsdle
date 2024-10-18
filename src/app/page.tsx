@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import Image from 'next/image';
 
 const HomePage: React.FC = () => {
   const router = useRouter();
@@ -25,6 +26,7 @@ const HomePage: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center justify-center overflow-hidden min-h-screen max-h-screen bg-darkBackground text-lightGray gap-6">
+      <Image src='/images/bg.jpg' alt='bgosrs' layout='fill' objectFit='cover' objectPosition='center' className='z-0'></Image>
       <div>
         <h1 className="text-5xl font-bold" style={{ color: '#E1C12B' }}>
           OSRSdle
