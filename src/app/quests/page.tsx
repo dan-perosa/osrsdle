@@ -165,7 +165,7 @@ const QuestsPage: React.FC = () => {
   }
   
   return (
-    <div className="flex flex-col items-center min-h-screen bg-darkBackground text-lightGray p-6 w-full">
+    <div className="flex flex-col items-center min-h-screen text-lightGray p-6 w-full">
       <div className='flex flex-col items-center justify-center w-full '>
         <h1 className="text-4xl font-bold mb-4" style={{ color: '#E1C12B' }}>
           Quests
