@@ -1,4 +1,4 @@
-export async function handleVictory(arr: any[], token:string): Promise<void> {
+export async function handleVictory(arr: any[], token: string, minigame: string): Promise<void> {
     const len = arr.length;
     if (len >= 50) {
         return
@@ -14,9 +14,16 @@ export async function handleVictory(arr: any[], token:string): Promise<void> {
             body: JSON.stringify({
                 list: arr,
                 score: score,
-                token: token
+                token: token,
+                minigame: minigame
               }),
         });
+        console.log(JSON.stringify({
+            list: arr,
+            score: score,
+            token: token,
+            minigame: minigame
+          }))
         const data = await response.json()
         console.log(data)
     } catch (error) {

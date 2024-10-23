@@ -133,7 +133,9 @@ const MonstersPage: React.FC = () => {
       if (randomMonster && randomMonster.id === monster.id) {
         setIsVictoryPopupVisible(true)
         if (jwtToken !== '') {
-          handleVictory(selectedMonsters, jwtToken)
+          const arrayToPassToApi = [...selectedMonsters]
+          arrayToPassToApi.push(monsterToAdd)
+          await handleVictory(arrayToPassToApi, jwtToken, 'monsters')
         }
       }
       // checks hints
