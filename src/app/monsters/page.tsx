@@ -2,6 +2,7 @@
 
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { handleVictory } from '../utils/handleVictory'
 
 
 interface Monster {
@@ -71,6 +72,7 @@ const MonstersPage: React.FC = () => {
     const [thirdHint, setThirdHint] = useState<string | null>(null)
     const [thirdHintButtonVisible, setThirdHintButtonVisible] = useState<true | false>(false) 
     const [isThirdHintPopupVisible, setIsThirdHintPopupVisible] = useState<true | false>(false)
+    const [jwtToken, setJwtToken] = useState<string>('')
 
     const fetchMonsters = async () => {
       try {
@@ -98,6 +100,8 @@ const MonstersPage: React.FC = () => {
   };
   
     useEffect(() => {
+      const token = localStorage.getItem('token')
+      token && setJwtToken(token)
       fetchMonsters();
     }, []);  
   
@@ -128,6 +132,9 @@ const MonstersPage: React.FC = () => {
       // checks win
       if (randomMonster && randomMonster.id === monster.id) {
         setIsVictoryPopupVisible(true)
+        if (jwtToken !== '') {
+          handleVictory(selectedMonsters, jwtToken)
+        }
       }
       // checks hints
       else if (selectedMonsters.length > 10 && selectedMonsters.length < 20) {
