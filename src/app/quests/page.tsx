@@ -2,6 +2,8 @@
 
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { handleVictory } from '../utils/handleVictory'
+import { checkExistingVictory } from '../utils/checkExistingVictory'
 
 
 interface Quest {
@@ -33,6 +35,7 @@ const QuestsPage: React.FC = () => {
   const [loading, setLoading] = useState<true | false>(true)
   const [apiError, setApiError] = useState<true | false>(false)
   const [isVictoryPopupVisible, setIsVictoryPopupVisible] = useState(false);
+  const [jwtToken, setJwtToken] = useState<string>('')
 
   const fetchQuests = async () => {
     try {
@@ -43,27 +46,35 @@ const QuestsPage: React.FC = () => {
     const data = await response.json();
     const sortedData = data.sort((a: Quest, b: Quest) => (a.Name > b.Name) ? 1 : ((b.Name > a.Name) ? -1 : 0))
     setQuests(sortedData);
+    const response2 = await fetch('http://127.0.0.1:5000/daily_quest/', {
+        mode: 'cors',
+        method: 'GET',
+      });
+    const data2 = await response2.json();
+    setRandomQuest(data2)
+    console.log(data2)
+    const token = localStorage.getItem('token')
+    if (token) {
+      const selectedList = await checkExistingVictory(token, 'quests')
+      console.log(selectedList)
+      if (selectedList === '' || selectedList === undefined) {
+        return
+      }
+      setIsVictoryPopupVisible(true)
+      typeof selectedList === 'object' && setSelectedQuests(selectedList)
+    }
   } catch (error) {
     console.error('Erro ao buscar quests:', error);
     setApiError(true)
-  }
-    try {
-      const response = await fetch('http://127.0.0.1:5000/daily_quest/', {
-          mode: 'cors',
-          method: 'GET',
-        });
-    const data = await response.json();
-    setRandomQuest(data)
-    console.log(data)
-  } catch (error) {
-    console.error('Erro ao buscar quests:', error);
-    setApiError(true)
+  } finally {
+    setLoading(false)
   }
 };
 
   useEffect(() => {
+    const token = localStorage.getItem('token')
+    token && setJwtToken(token)
     fetchQuests();
-    setLoading(false)
   }, []);
 
 
@@ -85,7 +96,7 @@ const QuestsPage: React.FC = () => {
     setUserInput(e.target.value);
   };
 
-  const handleQuestSelect = (quest: Quest) => {
+  const handleQuestSelect = async (quest: Quest) => {
     const questToAdd = findSelectedQuestColorsAndArrows(quest)
     setSelectedQuests(prevQuests => [...prevQuests, questToAdd]);
     setUserInput('')
@@ -95,6 +106,11 @@ const QuestsPage: React.FC = () => {
     if (randomQuest) {
       if (randomQuest.Name === quest.Name) {
         setIsVictoryPopupVisible(true)
+        if (jwtToken !== '') {
+          const arrayToPassToApi = [...selectedQuests]
+          arrayToPassToApi.push(questToAdd)
+          await handleVictory(arrayToPassToApi, jwtToken, 'quests')
+        }
       }
     }
   };

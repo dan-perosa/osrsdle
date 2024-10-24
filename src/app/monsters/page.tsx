@@ -3,6 +3,7 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { handleVictory } from '../utils/handleVictory'
+import { checkExistingVictory } from '../utils/checkExistingVictory'
 
 
 interface Monster {
@@ -91,6 +92,15 @@ const MonstersPage: React.FC = () => {
       const data2 = await response2.json();
       setRandomMonster(data2)
       console.log(data2)
+      const token = localStorage.getItem('token')
+      if (token) {
+        const selectedList = await checkExistingVictory(token, 'monsters')
+        if (selectedList === '') {
+          return
+        }
+        setIsVictoryPopupVisible(true)
+        typeof selectedList === 'object' && setSelectedMonsters(selectedList)
+      }
     } catch (error) {
       console.error('Erro ao buscar monstros:', error);
       setApiError(true)
