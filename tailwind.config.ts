@@ -21,7 +21,7 @@ const config: Config = {
         darkGray: "#7E7E7E",
         softRed: "#D9534F",
         softBlue: "#5BC0DE",
-        orange: "#F0AD4E",
+        'orange-500': "#ed981f",
         lightBrown: "#C19A6B",
         paleYellow: "#F7EA00",
         teal: "#20B2AA",

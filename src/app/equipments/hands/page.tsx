@@ -2,7 +2,8 @@
 
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-
+import { handleVictory } from '../../utils/handleVictory'
+import { checkExistingVictory } from '../../utils/checkExistingVictory'
 
 interface Equipment {
   id: number;
@@ -77,6 +78,7 @@ const EquipmentsPage: React.FC = () => {
     const [thirdHint, setThirdHint] = useState<string | null>(null)
     const [thirdHintButtonVisible, setThirdHintButtonVisible] = useState<true | false>(false) 
     const [isThirdHintPopupVisible, setIsThirdHintPopupVisible] = useState<true | false>(false)
+    const [jwtToken, setJwtToken] = useState<string>('')
   
     const fetchEquipments = async () => {
       try {
@@ -94,7 +96,16 @@ const EquipmentsPage: React.FC = () => {
       const data2 = await response2.json();
       setRandomEquipment(data2)
       console.log(data2)
-
+      const token = localStorage.getItem('token')
+      if (token) {
+        const selectedList = await checkExistingVictory(token, 'hands')
+        console.log(selectedList)
+        if (selectedList === '' || selectedList === undefined) {
+          return
+        }
+        setIsVictoryPopupVisible(true)
+        typeof selectedList === 'object' && setSelectedEquipments(selectedList)
+      }
     } catch (error) {
       console.error('Erro ao buscar equipamentos:', error);
       setApiError(true)
@@ -109,6 +120,8 @@ const EquipmentsPage: React.FC = () => {
   
     useEffect(() => {
       if (userInput === '') {
+        const token = localStorage.getItem('token')
+        token && setJwtToken(token)
         setFilteredEquipments([]);
         return;
       }
@@ -125,7 +138,7 @@ const EquipmentsPage: React.FC = () => {
       setUserInput(e.target.value);
     };
 
-    const handleEquipmentSelect = (equipment: Equipment) => {
+    const handleEquipmentSelect = async (equipment: Equipment) => {
       const equipmentToAdd = findSelectedEquipmentColorsAndArrows(equipment)
       setSelectedEquipments(prevEquipments => [...prevEquipments, equipmentToAdd]);
       setUserInput('')
@@ -134,6 +147,11 @@ const EquipmentsPage: React.FC = () => {
       // checks win
     if (randomEquipment && randomEquipment.id === equipment.id) {
         setIsVictoryPopupVisible(true)
+        if (jwtToken !== '') {
+          const arrayToPassToApi = [...selectedEquipments]
+          arrayToPassToApi.push(equipmentToAdd)
+          await handleVictory(arrayToPassToApi, jwtToken, 'hands')
+        }
     }
     // checks hints
     else if (selectedEquipments.length > 10 && selectedEquipments.length < 20) {
