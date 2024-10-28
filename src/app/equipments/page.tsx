@@ -357,8 +357,8 @@ const EquipmentsPage: React.FC = () => {
         </div>
         )}
         {selectedEquipments.length > 0 && (
-        <div className="fixed flex flex-col items-center w-full top-40 z-0">
-          <div className="overflow-auto max-h-96 w-[85%]">
+        <div className="fixed flex flex-col items-center w-full top-40 z-0 max-h-[62%]">
+          <div className="flex flex-col overflow-auto max-h-full w-[85%]">
             <table className="bg-gray-800 text-lightGray border border-hidden table-auto w-full">
               <thead className='sticky top-0 bg-gray-800 border-hidden text-sm'>
                 <tr>
@@ -589,7 +589,7 @@ const EquipmentsPage: React.FC = () => {
           </div>
         </div>
       )}
-        <div className='flex flex-row items-center justify-center fixed bottom-4 gap-4'>
+        <div className='flex flex-row items-center justify-center fixed bottom-4 gap-4 w-full'>
           <div>
             <button
               onClick={() => router.push('/')}
