@@ -192,7 +192,7 @@ const HomePage: React.FC = () => {
       </div>
       <div
         className={`flex flex-wrap mb-0 justify-center transition-transform duration-500 max-w-[60%] gap-4 ${
-          showEquipment ? 'translate-y-0' : 'translate-y-[400%]'
+          showEquipment ? 'translate-y-0' : 'translate-y-[1300px]'
         }`}
       >
         <button onClick={() => handleEquipmentTypeClick('equipments')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">All equipments (hard)</button>     
