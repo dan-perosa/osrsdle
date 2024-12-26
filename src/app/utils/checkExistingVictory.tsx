@@ -1,6 +1,8 @@
+import { BASE_URL } from "./baseUrl";
+
 export async function checkExistingVictory(token: string, minigame: string): Promise<string | undefined | []> {
     try {
-        const response = await fetch('http://127.0.0.1:5000/user/check_existing_victory/', {
+        const response = await fetch(`${BASE_URL}user/check_existing_victory/`, {
             mode: 'cors',
             method: 'POST',
             headers: {

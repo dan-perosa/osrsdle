@@ -1,3 +1,5 @@
+import { BASE_URL } from "./baseUrl";
+
 export async function handleVictory(arr: any[], token: string, minigame: string): Promise<void> {
     const len = arr.length;
     if (len >= 50) {
@@ -5,7 +7,7 @@ export async function handleVictory(arr: any[], token: string, minigame: string)
     }
     const score = 50 - len;
     try {
-        const response = await fetch('http://127.0.0.1:5000/user/sum_score/', {
+        const response = await fetch(`${BASE_URL}user/sum_score/`, {
             mode: 'cors',
             method: 'POST',
             headers: {

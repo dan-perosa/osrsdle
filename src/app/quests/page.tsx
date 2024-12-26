@@ -4,6 +4,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { handleVictory } from '../utils/handleVictory'
 import { checkExistingVictory } from '../utils/checkExistingVictory'
+import { BASE_URL } from '../utils/baseUrl';
 
 
 interface Quest {
@@ -39,14 +40,14 @@ const QuestsPage: React.FC = () => {
 
   const fetchQuests = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:5000/quests/', {
+      const response = await fetch(`${BASE_URL}quests`, {
           mode: 'cors',
           method: 'GET',
         });
     const data = await response.json();
     const sortedData = data.sort((a: Quest, b: Quest) => (a.Name > b.Name) ? 1 : ((b.Name > a.Name) ? -1 : 0))
     setQuests(sortedData);
-    const response2 = await fetch('http://127.0.0.1:5000/daily_quest/', {
+    const response2 = await fetch(`${BASE_URL}daily_quest`, {
         mode: 'cors',
         method: 'GET',
       });

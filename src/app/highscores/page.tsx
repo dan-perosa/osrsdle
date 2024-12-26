@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { BASE_URL } from '../utils/baseUrl';
 
 interface UserScore {
   user: string;
@@ -19,7 +20,7 @@ const HighScoresPage: React.FC = () => {
 
   const fetchHighScores = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:5000/user/get_highscores/');
+      const response = await fetch(`${BASE_URL}user/get_highscores/`);
       const data = await response.json();
       setHighscores(data);
     } catch (error) {

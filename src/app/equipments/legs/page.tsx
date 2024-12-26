@@ -4,6 +4,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { handleVictory } from '../../utils/handleVictory'
 import { checkExistingVictory } from '../../utils/checkExistingVictory'
+import { BASE_URL } from '@/app/utils/baseUrl';
 
 
 interface Equipment {
@@ -83,14 +84,14 @@ const EquipmentsPage: React.FC = () => {
   
     const fetchEquipments = async () => {
       try {
-      const response = await fetch('http://127.0.0.1:5000/equipments/legs', {
+      const response = await fetch(`${BASE_URL}equipments/legs`, {
             mode: 'cors',
             method: 'GET',
           });
       const data = await response.json();
       setEquipments(data);
 
-      const response2 = await fetch('http://127.0.0.1:5000/daily_legs_equipment/', {
+      const response2 = await fetch(`${BASE_URL}daily_legs_equipment/`, {
             mode: 'cors',
             method: 'GET',
           });

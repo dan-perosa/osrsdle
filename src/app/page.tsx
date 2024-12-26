@@ -3,6 +3,7 @@
 import { exec } from 'child_process';
 import { useRouter } from 'next/navigation';
 import { useState, ChangeEvent, useEffect } from 'react';
+import { BASE_URL } from './utils/baseUrl';
 
 const HomePage: React.FC = () => {
   const router = useRouter();
@@ -53,7 +54,7 @@ const HomePage: React.FC = () => {
       return;
     }
     try {
-      const response = await fetch('http://127.0.0.1:5000/user/create/', {
+      const response = await fetch(`${BASE_URL}user/create/`, {
         mode: 'cors',
         method: 'POST',
         headers: {
@@ -82,7 +83,7 @@ const HomePage: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:5000/user/logout/', {
+      const response = await fetch(`${BASE_URL}user/logout/`, {
         mode: 'cors',
         method: 'POST',
         headers: {
@@ -116,7 +117,7 @@ const HomePage: React.FC = () => {
       return;
     }
     try {
-      const response = await fetch('http://127.0.0.1:5000/user/login/', {
+      const response = await fetch(`${BASE_URL}user/login/`, {
         mode: 'cors',
         method: 'POST',
         headers: {

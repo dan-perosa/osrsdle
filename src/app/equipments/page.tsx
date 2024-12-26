@@ -4,6 +4,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { handleVictory } from '../utils/handleVictory'
 import { checkExistingVictory } from '../utils/checkExistingVictory'
+import { BASE_URL } from '../utils/baseUrl';
 
 
 interface Equipment {
@@ -88,7 +89,7 @@ const EquipmentsPage: React.FC = () => {
   
     const fetchEquipments = async () => {
       try {
-      const response = await fetch('http://127.0.0.1:5000/equipments/', {
+      const response = await fetch(`${BASE_URL}equipments/`, {
             mode: 'cors',
             method: 'GET',
           });
@@ -96,7 +97,7 @@ const EquipmentsPage: React.FC = () => {
       const sortedData = data.sort((a: Equipment, b: Equipment) => (a.equipment_name > b.equipment_name) ? 1 : ((b.equipment_name > a.equipment_name) ? -1 : 0))
       setEquipments(sortedData);
 
-      const response2 = await fetch('http://127.0.0.1:5000/daily_equipment/', {
+      const response2 = await fetch(`${BASE_URL}daily_equipment/`, {
             mode: 'cors',
             method: 'GET',
           });

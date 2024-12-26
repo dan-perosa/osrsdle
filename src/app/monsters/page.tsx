@@ -4,6 +4,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { handleVictory } from '../utils/handleVictory'
 import { checkExistingVictory } from '../utils/checkExistingVictory'
+import { BASE_URL } from '../utils/baseUrl';
 
 
 interface Monster {
@@ -77,7 +78,7 @@ const MonstersPage: React.FC = () => {
 
     const fetchMonsters = async () => {
       try {
-      const response = await fetch('http://127.0.0.1:5000/monsters/', {
+      const response = await fetch(`${BASE_URL}monsters/`, {
             mode: 'cors',
             method: 'GET',
           });
@@ -85,7 +86,7 @@ const MonstersPage: React.FC = () => {
       const sortedData = data.sort((a: Monster, b: Monster) => (a.monster_name > b.monster_name) ? 1 : ((b.monster_name > a.monster_name) ? -1 : 0))
       setMonsters(sortedData);
 
-      const response2 = await fetch('http://127.0.0.1:5000/daily_monster/', {
+      const response2 = await fetch(`${BASE_URL}daily_monster/`, {
             mode: 'cors',
             method: 'GET',
           });
