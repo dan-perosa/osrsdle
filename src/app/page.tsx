@@ -193,7 +193,7 @@ const HomePage: React.FC = () => {
       </div>
       <div
         className={`flex flex-wrap mb-0 justify-center transition-transform duration-500 max-w-[60%] gap-4 ${
-          showEquipment ? 'translate-y-0' : 'translate-y-[1300px]'
+          showEquipment ? 'translate-y-0' : 'translate-y-[-1900px]'
         }`}
       >
         <button onClick={() => handleEquipmentTypeClick('equipments')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">All equipments (hard)</button>     
@@ -210,7 +210,7 @@ const HomePage: React.FC = () => {
         <button onClick={() => handleEquipmentTypeClick('two-handed')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Two-handed</button>
         <button onClick={() => handleEquipmentTypeClick('weapon')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Weapon</button>
       </div>
-      <div className='flex flex-row gap-4'>
+      <div className={`flex flex-row gap-4 transition-transform duration-500 ${showEquipment ? 'translate-y-0' : 'translate-y-[-100px]'}`}>
         {jwtToken ? (
         <button 
         className='px-4 py-2 bg-lightBrown text-lightGray rounded-lg shadow-lg hover:bg-green-600 transition'
