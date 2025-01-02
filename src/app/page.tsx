@@ -18,10 +18,19 @@ const HomePage: React.FC = () => {
   const [createAccountErrorMessage, setCreateAccountErrorMessage] = useState<string>('')
   const [isCreateAccountVisible, setIsCreateAccountVisible] = useState<true | false>(false)
   const [jwtToken, setJwtToken] = useState<string>('')
+  const [loading, setLoading] = useState<true | false>(true)
+  const [loggingOut, setLoggingOut] = useState<true | false>(false)
+
 
   useEffect(() => {
-    const token = localStorage.getItem('token')
-    token && setJwtToken(token)
+    try {
+      const token = localStorage.getItem('token')
+      token && setJwtToken(token)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
   })
 
   const handleNavigation = (route: string) => {
@@ -82,6 +91,7 @@ const HomePage: React.FC = () => {
   }
 
   const handleLogout = async () => {
+    setLoggingOut(true)
     try {
       const response = await fetch(`${BASE_URL}user/logout/`, {
         mode: 'cors',
@@ -106,6 +116,8 @@ const HomePage: React.FC = () => {
     } catch (error) {
       console.error('Error', error)
       alert('Logout failed');
+    } finally {
+      setLoggingOut(false)
     }
   }
 
@@ -163,6 +175,14 @@ const HomePage: React.FC = () => {
   const handlePassword2CreateAccountInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword2CreateAccountInput(e.target.value);
   };
+
+  if (loading) {
+    return <div className="w-screen h-screen bg-darkBackground text-white flex items-center justify-center">Loading...</div>;
+  }
+
+  if (loggingOut) {
+    return <div className="w-screen h-screen bg-darkBackground text-white flex items-center justify-center">Logging out...</div>;
+  }
 
   return (
     <div className="flex flex-col items-center justify-center overflow-hidden min-h-screen max-h-screen text-lightGray gap-6">
