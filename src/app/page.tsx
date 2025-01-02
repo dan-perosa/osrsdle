@@ -269,8 +269,8 @@ const HomePage: React.FC = () => {
         </div>
       )}
       {isCreateAccountVisible && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70">
-          <div className="bg-background flex flex-col items-center p-6 rounded-lg shadow-lg">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70" onClick={() => setIsCreateAccountVisible(false)}>
+          <div className="bg-background flex flex-col items-center p-6 rounded-lg shadow-lg" onClick={(e) => e.stopPropagation()}>
             <h2 className="text-lg font-bold mb-4">Create Account</h2>
             <input
             value={usernameCreateAccountInput}
