@@ -5,7 +5,7 @@ export async function handleVictory(arr: any[], token: string, minigame: string)
     if (len >= 50) {
         return
     }
-    const score = 50 - len;
+    const score = 51 - len;
     try {
         const response = await fetch(`${BASE_URL}user/sum_score/`, {
             mode: 'cors',
