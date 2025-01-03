@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { handleVictory } from '../utils/handleVictory'
 import { checkExistingVictory } from '../utils/checkExistingVictory'
 import { BASE_URL } from '../utils/baseUrl';
+import { updateUserSelectedList } from '../utils/updateUserSelectedList';
 
 
 interface Quest {
@@ -103,6 +104,12 @@ const QuestsPage: React.FC = () => {
     setUserInput('')
     setQuests(prevQuests => prevQuests.filter(q => q.Name !== quest.Name));
     setFilteredQuests([]);
+    if (jwtToken !== '') {
+      console.log('sergio')
+      const addToUserSelected = [...selectedQuests]
+      addToUserSelected.push(questToAdd)
+      await updateUserSelectedList(jwtToken, 'quests', addToUserSelected)
+    }
     // checks win
     if (randomQuest) {
       if (randomQuest.Name === quest.Name) {

@@ -85,7 +85,6 @@ const MonstersPage: React.FC = () => {
       const data = await response.json();
       const sortedData = data.sort((a: Monster, b: Monster) => (a.monster_name > b.monster_name) ? 1 : ((b.monster_name > a.monster_name) ? -1 : 0))
       setMonsters(sortedData);
-      console.log(sortedData)
 
       const response2 = await fetch(`${BASE_URL}daily_monster/`, {
             mode: 'cors',
@@ -93,6 +92,7 @@ const MonstersPage: React.FC = () => {
           });
       const data2 = await response2.json();
       setRandomMonster(data2)
+      console.log(data2)
 
       const token = localStorage.getItem('token')
       if (token) {
