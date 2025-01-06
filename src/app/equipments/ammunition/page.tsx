@@ -148,7 +148,6 @@ const EquipmentsPage: React.FC = () => {
     };
 
     const handleEquipmentSelect = async (equipment: Equipment) => {
-      console.log(jwtToken)
       const equipmentToAdd = findSelectedEquipmentColorsAndArrows(equipment)
       setSelectedEquipments(prevEquipments => [...prevEquipments, equipmentToAdd]);
       setUserInput('')
