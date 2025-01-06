@@ -1,6 +1,6 @@
 import { BASE_URL } from "./baseUrl";
 
-export async function updateUserSelectedList(token: string, minigame: string, selectedList: any[]): Promise<string | undefined | []> {
+export async function updateUserSelectedList(token: string, minigame: string, selectedList: any[], victory: boolean): Promise<string | undefined | []> {
     try {
         console.log(JSON.stringify({
             token: token,
@@ -8,7 +8,8 @@ export async function updateUserSelectedList(token: string, minigame: string, se
             selected_list: selectedList
           }))
         // const response = await fetch(`${BASE_URL}user/update_user_selected_list/`, {
-        const response = await fetch('http://127.0.0.1:5000/users/update_user_selected_list/', {
+        const response = await fetch(`${BASE_URL}user/update_user_selected_list/`, {
+            mode: 'cors',
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -16,7 +17,8 @@ export async function updateUserSelectedList(token: string, minigame: string, se
             body: JSON.stringify({
                 token: token,
                 minigame: minigame,
-                selected_list: selectedList
+                selected_list: selectedList,
+                victory: victory
               }),
         });
         const data = await response.json()

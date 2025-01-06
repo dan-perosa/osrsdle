@@ -38,6 +38,7 @@ const QuestsPage: React.FC = () => {
   const [apiError, setApiError] = useState<true | false>(false)
   const [isVictoryPopupVisible, setIsVictoryPopupVisible] = useState(false);
   const [jwtToken, setJwtToken] = useState<string>('')
+  const [victory, setVictory] = useState<true | false>(false)
 
   const fetchQuests = async () => {
     try {
@@ -57,13 +58,20 @@ const QuestsPage: React.FC = () => {
     console.log(data2)
     const token = localStorage.getItem('token')
     if (token) {
-      const selectedList = await checkExistingVictory(token, 'quests')
-      console.log(selectedList)
-      if (selectedList === '' || selectedList === undefined) {
-        return
+      const listAndBooleanVictory = await checkExistingVictory(token, 'quests')
+      if (listAndBooleanVictory){
+        const selectedList = listAndBooleanVictory.selected_list
+        const victory = listAndBooleanVictory.victory
+
+        if (victory === true) {
+          setIsVictoryPopupVisible(true)
+        }
+        if (selectedList === '' || selectedList === undefined) {
+          return
+        }
+        typeof selectedList === 'object' && setSelectedQuests(selectedList)
       }
-      setIsVictoryPopupVisible(true)
-      typeof selectedList === 'object' && setSelectedQuests(selectedList)
+      console.log(listAndBooleanVictory)
     }
   } catch (error) {
     console.error('Erro ao buscar quests:', error);
@@ -108,16 +116,18 @@ const QuestsPage: React.FC = () => {
       console.log('sergio')
       const addToUserSelected = [...selectedQuests]
       addToUserSelected.push(questToAdd)
-      await updateUserSelectedList(jwtToken, 'quests', addToUserSelected)
+      await updateUserSelectedList(jwtToken, 'quests', addToUserSelected, victory)
     }
     // checks win
     if (randomQuest) {
       if (randomQuest.Name === quest.Name) {
         setIsVictoryPopupVisible(true)
         if (jwtToken !== '') {
+          setVictory(true)
+          const victoryToPassToApi = true
           const arrayToPassToApi = [...selectedQuests]
           arrayToPassToApi.push(questToAdd)
-          await handleVictory(arrayToPassToApi, jwtToken, 'quests')
+          await handleVictory(arrayToPassToApi, jwtToken, 'quests', victoryToPassToApi)
         }
       }
     }

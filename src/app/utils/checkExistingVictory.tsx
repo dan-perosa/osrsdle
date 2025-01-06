@@ -1,7 +1,16 @@
 import { BASE_URL } from "./baseUrl";
 
-export async function checkExistingVictory(token: string, minigame: string): Promise<string | undefined | []> {
+interface DataToReturn {
+    selected_list: string;
+    victory: boolean
+}
+
+export async function checkExistingVictory(token: string, minigame: string): Promise<undefined | DataToReturn> {
     try {
+        console.log(JSON.stringify({
+            token: token,
+            minigame: minigame
+          }))
         const response = await fetch(`${BASE_URL}user/check_existing_victory/`, {
             mode: 'cors',
             method: 'POST',
@@ -15,7 +24,11 @@ export async function checkExistingVictory(token: string, minigame: string): Pro
         });
         const data = await response.json()
         console.log(data)
-        return data.selected_list
+        const dataToReturn = {
+            'selected_list': data.selected_list,
+            'victory': data.victory
+        } 
+        return dataToReturn
     } catch (error) {
         console.error('Error updating score:', error);
     } 
