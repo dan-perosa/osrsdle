@@ -75,7 +75,6 @@ const MonstersPage: React.FC = () => {
     const [thirdHintButtonVisible, setThirdHintButtonVisible] = useState<true | false>(false) 
     const [isThirdHintPopupVisible, setIsThirdHintPopupVisible] = useState<true | false>(false)
     const [jwtToken, setJwtToken] = useState<string>('')
-    const [victory, setVictory] = useState<true | false>(false)
 
     const fetchMonsters = async () => {
       try {

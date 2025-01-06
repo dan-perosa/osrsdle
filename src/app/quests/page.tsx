@@ -116,7 +116,6 @@ const QuestsPage: React.FC = () => {
       if (randomQuest.Name === quest.Name) {
         setIsVictoryPopupVisible(true)
         if (jwtToken !== '') {
-          setVictory(true)
           const arrayToPassToApi = [...selectedQuests]
           arrayToPassToApi.push(questToAdd)
           await handleVictory(arrayToPassToApi, jwtToken, 'quests')
