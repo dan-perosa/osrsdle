@@ -1,6 +1,6 @@
 import { BASE_URL } from "./baseUrl";
 
-export async function handleVictory(arr: any[], token: string, minigame: string, victory: boolean): Promise<void> {
+export async function handleVictory(arr: any[], token: string, minigame: string): Promise<void> {
     const len = arr.length;
     if (len >= 50) {
         return
@@ -18,7 +18,7 @@ export async function handleVictory(arr: any[], token: string, minigame: string,
                 score: score,
                 token: token,
                 minigame: minigame,
-                victory: victory
+                victory: true
               }),
         });
         const data = await response.json()

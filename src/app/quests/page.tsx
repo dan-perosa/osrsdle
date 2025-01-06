@@ -59,6 +59,7 @@ const QuestsPage: React.FC = () => {
     const token = localStorage.getItem('token')
     if (token) {
       const listAndBooleanVictory = await checkExistingVictory(token, 'quests')
+      console.log(listAndBooleanVictory)
       if (listAndBooleanVictory){
         const selectedList = listAndBooleanVictory.selected_list
         const victory = listAndBooleanVictory.victory
@@ -71,7 +72,6 @@ const QuestsPage: React.FC = () => {
         }
         typeof selectedList === 'object' && setSelectedQuests(selectedList)
       }
-      console.log(listAndBooleanVictory)
     }
   } catch (error) {
     console.error('Erro ao buscar quests:', error);
@@ -124,10 +124,9 @@ const QuestsPage: React.FC = () => {
         setIsVictoryPopupVisible(true)
         if (jwtToken !== '') {
           setVictory(true)
-          const victoryToPassToApi = true
           const arrayToPassToApi = [...selectedQuests]
           arrayToPassToApi.push(questToAdd)
-          await handleVictory(arrayToPassToApi, jwtToken, 'quests', victoryToPassToApi)
+          await handleVictory(arrayToPassToApi, jwtToken, 'quests')
         }
       }
     }
