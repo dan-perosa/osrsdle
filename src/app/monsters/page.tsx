@@ -156,12 +156,13 @@ const MonstersPage: React.FC = () => {
           const arrayToPassToApi = [...selectedMonsters]
           arrayToPassToApi.push(monsterToAdd)
           await handleVictory(arrayToPassToApi, jwtToken, 'monsters')
+          return
         }
       }
       if (jwtToken !== '') {
         const addToUserSelected = [...selectedMonsters]
         addToUserSelected.push(monsterToAdd)
-        await updateUserSelectedList(jwtToken, 'quests', addToUserSelected)
+        await updateUserSelectedList(jwtToken, 'monsters', addToUserSelected)
       }
       // checks hints
       else if (selectedMonsters.length > 10 && selectedMonsters.length < 20) {

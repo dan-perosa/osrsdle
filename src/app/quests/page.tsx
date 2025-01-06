@@ -120,6 +120,7 @@ const QuestsPage: React.FC = () => {
           const arrayToPassToApi = [...selectedQuests]
           arrayToPassToApi.push(questToAdd)
           await handleVictory(arrayToPassToApi, jwtToken, 'quests')
+          return
         }
       }
     }
