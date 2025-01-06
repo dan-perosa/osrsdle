@@ -59,7 +59,6 @@ const QuestsPage: React.FC = () => {
     const token = localStorage.getItem('token')
     if (token) {
       const listAndBooleanVictory = await checkExistingVictory(token, 'quests')
-      console.log(listAndBooleanVictory)
       if (listAndBooleanVictory){
         const selectedList = listAndBooleanVictory.selected_list
         const victory = listAndBooleanVictory.victory
@@ -112,12 +111,6 @@ const QuestsPage: React.FC = () => {
     setUserInput('')
     setQuests(prevQuests => prevQuests.filter(q => q.Name !== quest.Name));
     setFilteredQuests([]);
-    if (jwtToken !== '') {
-      console.log('sergio')
-      const addToUserSelected = [...selectedQuests]
-      addToUserSelected.push(questToAdd)
-      await updateUserSelectedList(jwtToken, 'quests', addToUserSelected, victory)
-    }
     // checks win
     if (randomQuest) {
       if (randomQuest.Name === quest.Name) {
@@ -129,6 +122,11 @@ const QuestsPage: React.FC = () => {
           await handleVictory(arrayToPassToApi, jwtToken, 'quests')
         }
       }
+    }
+    if (jwtToken !== '') {
+      const addToUserSelected = [...selectedQuests]
+      addToUserSelected.push(questToAdd)
+      await updateUserSelectedList(jwtToken, 'quests', addToUserSelected)
     }
   };
 

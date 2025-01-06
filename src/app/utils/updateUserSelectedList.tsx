@@ -1,6 +1,6 @@
 import { BASE_URL } from "./baseUrl";
 
-export async function updateUserSelectedList(token: string, minigame: string, selectedList: any[], victory: boolean): Promise<string | undefined | []> {
+export async function updateUserSelectedList(token: string, minigame: string, selectedList: any[]): Promise<string | undefined | []> {
     try {
         console.log(JSON.stringify({
             token: token,
@@ -18,7 +18,6 @@ export async function updateUserSelectedList(token: string, minigame: string, se
                 token: token,
                 minigame: minigame,
                 selected_list: selectedList,
-                victory: victory
               }),
         });
         const data = await response.json()

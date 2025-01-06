@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { handleVictory } from '../utils/handleVictory'
 import { checkExistingVictory } from '../utils/checkExistingVictory'
 import { BASE_URL } from '../utils/baseUrl';
-
+import { updateUserSelectedList } from '../utils/updateUserSelectedList';
 
 interface Monster {
   id: number;
@@ -75,6 +75,7 @@ const MonstersPage: React.FC = () => {
     const [thirdHintButtonVisible, setThirdHintButtonVisible] = useState<true | false>(false) 
     const [isThirdHintPopupVisible, setIsThirdHintPopupVisible] = useState<true | false>(false)
     const [jwtToken, setJwtToken] = useState<string>('')
+    const [victory, setVictory] = useState<true | false>(false)
 
     const fetchMonsters = async () => {
       try {
@@ -96,12 +97,19 @@ const MonstersPage: React.FC = () => {
 
       const token = localStorage.getItem('token')
       if (token) {
-        const selectedList = await checkExistingVictory(token, 'monsters')
-        if (selectedList === '') {
-          return
+        const listAndBooleanVictory = await checkExistingVictory(token, 'monsters')
+        if (listAndBooleanVictory){
+          const selectedList = listAndBooleanVictory.selected_list
+          const victory = listAndBooleanVictory.victory
+  
+          if (victory === true) {
+            setIsVictoryPopupVisible(true)
+          }
+          if (selectedList === '' || selectedList === undefined) {
+            return
+          }
+          typeof selectedList === 'object' && setSelectedMonsters(selectedList)
         }
-        setIsVictoryPopupVisible(true)
-        typeof selectedList === 'object' && setSelectedMonsters(selectedList)
       }
     } catch (error) {
       console.error('Erro ao buscar monstros:', error);
@@ -149,6 +157,11 @@ const MonstersPage: React.FC = () => {
           arrayToPassToApi.push(monsterToAdd)
           await handleVictory(arrayToPassToApi, jwtToken, 'monsters')
         }
+      }
+      if (jwtToken !== '') {
+        const addToUserSelected = [...selectedMonsters]
+        addToUserSelected.push(monsterToAdd)
+        await updateUserSelectedList(jwtToken, 'quests', addToUserSelected)
       }
       // checks hints
       else if (selectedMonsters.length > 10 && selectedMonsters.length < 20) {
