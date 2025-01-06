@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { handleVictory } from '../../utils/handleVictory'
 import { checkExistingVictory } from '../../utils/checkExistingVictory'
 import { BASE_URL } from '@/app/utils/baseUrl';
+import { updateUserSelectedList } from '@/app/utils/updateUserSelectedList';
 
 
 interface Equipment {
@@ -100,13 +101,19 @@ const EquipmentsPage: React.FC = () => {
       console.log(data2)
       const token = localStorage.getItem('token')
       if (token) {
-        const selectedList = await checkExistingVictory(token, 'cape')
-        console.log(selectedList)
-        if (selectedList === '' || selectedList === undefined) {
-          return
+        const listAndBooleanVictory = await checkExistingVictory(token, 'cape')
+        if (listAndBooleanVictory){
+          const selectedList = listAndBooleanVictory.selected_list
+          const victory = listAndBooleanVictory.victory
+  
+          if (victory === true) {
+            setIsVictoryPopupVisible(true)
+          }
+          if (selectedList === '' || selectedList === undefined) {
+            return
+          }
+          typeof selectedList === 'object' && setSelectedEquipments(selectedList)
         }
-        setIsVictoryPopupVisible(true)
-        typeof selectedList === 'object' && setSelectedEquipments(selectedList)
       }
     } catch (error) {
       console.error('Erro ao buscar equipamentos:', error);
@@ -153,7 +160,13 @@ const EquipmentsPage: React.FC = () => {
           const arrayToPassToApi = [...selectedEquipments]
           arrayToPassToApi.push(equipmentToAdd)
           await handleVictory(arrayToPassToApi, jwtToken, 'cape')
+          return
         }
+    }
+    if (jwtToken !== '') {
+      const addToUserSelected = [...selectedEquipments]
+      addToUserSelected.push(equipmentToAdd)
+      await updateUserSelectedList(jwtToken, 'cape', addToUserSelected)
     }
     // checks hints
     else if (selectedEquipments.length > 10 && selectedEquipments.length < 20) {
