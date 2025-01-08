@@ -69,7 +69,7 @@ export const SearchBar = ({ filteredEquipments, handleEquipmentSelect }: SearchB
         <li
           key={equipment.id}
           onClick={() => handleEquipmentSelect(equipment)}
-          className="cursor-pointer hover:bg-gray-600 p-2"
+          className="cursor-pointer hover:bg-secondaryButtonHover p-2"
         >
           {equipment.equipment_name}
         </li>

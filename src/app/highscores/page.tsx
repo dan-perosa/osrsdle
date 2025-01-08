@@ -45,13 +45,13 @@ const HighScoresPage: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col items-center min-h-screen max-h-screen text-lightGray p-6 w-full items-center">
-      <h1 className="text-4xl font-bold mb-4" style={{ color: '#E1C12B' }}>
+    <div className="flex flex-col items-center min-h-screen h-screen text-white p-6 w-full items-center">
+      <h1 className="text-4xl font-bold mb-4 text-minigameHeader">
         Highscores
       </h1>
-      <div className="w-[80%] max-h-[80%]">
-        <table className="bg-gray-800 text-lightGray border border-hidden table-fixed w-full">
-          <thead className='sticky top-0 bg-gray-800 text-sm'>
+      <div className="w-[80%] max-h-[75%] overflow-auto">
+        <table className="bg-highscoreTableBg text-white border border-hidden table-fixed w-full box-white">
+          <thead className='sticky top-0 bg-modal text-sm z-0'>
             <tr>
               <th className="py-2 border-b border-gray-600">Rank</th>
               <th className="py-2 border-b border-gray-600">User</th>
@@ -73,7 +73,7 @@ const HighScoresPage: React.FC = () => {
         <div>
           <button
             onClick={() => router.push('/')}
-            className="px-6 py-3 bg-darkGreen text-lightGray rounded-lg shadow-lg hover:bg-green-600 transition"
+            className="px-6 py-3 bg-lightGrayButton text-white rounded-lg shadow-lg hover:bg-secondaryButtonHover transition"
           >
             Back
           </button>

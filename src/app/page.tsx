@@ -185,28 +185,28 @@ const HomePage: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center overflow-hidden min-h-screen max-h-screen text-lightGray gap-6">
+    <div className="flex flex-col items-center justify-center overflow-hidden min-h-screen max-h-screen text-white gap-6">
       <div>
-        <h1 className="text-5xl font-bold" style={{ color: '#E1C12B' }}>
+        <h1 className="text-5xl font-bold text-minigameHeader">
           OSRSdle
         </h1>
       </div>
       <div className="flex space-x-4">
         <button
           onClick={() => handleNavigation('/quests')}
-          className="px-4 py-2 bg-darkGreen text-lightGray rounded-lg shadow-lg hover:bg-green-600 transition"
+          className="px-4 py-2 bg-mainButton text-white rounded-lg shadow-lg hover:bg-secondaryButtonHover transition"
         >
           Quests
         </button>
         <button
           onClick={() => handleNavigation('/monsters')}
-          className="px-4 py-2 bg-darkGreen text-lightGray rounded-lg shadow-lg hover:bg-green-600 transition"
+          className="px-4 py-2 bg-mainButton text-white rounded-lg shadow-lg hover:bg-secondaryButtonHover transition"
         >
           Monsters
         </button>
         <button
           onClick={toggleEquipment}
-          className="px-4 py-2 bg-darkGreen text-lightGray rounded-lg shadow-lg hover:bg-green-600 transition"
+          className="px-4 py-2 bg-mainButton text-white rounded-lg shadow-lg hover:bg-secondaryButtonHover transition"
         >
           Equipments
         </button>
@@ -216,44 +216,44 @@ const HomePage: React.FC = () => {
           showEquipment ? 'translate-y-0' : 'translate-y-[-2000px]'
         }`}
       >
-        <button onClick={() => handleEquipmentTypeClick('equipments')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">All equipments (hard)</button>     
-        <button onClick={() => handleEquipmentTypeClick('ammunition')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Ammunition</button>
-        <button onClick={() => handleEquipmentTypeClick('body')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Body</button>
-        <button onClick={() => handleEquipmentTypeClick('cape')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Cape</button>
-        <button onClick={() => handleEquipmentTypeClick('feet')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Feet</button>
-        <button onClick={() => handleEquipmentTypeClick('hands')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Hands</button>
-        <button onClick={() => handleEquipmentTypeClick('head')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Head</button>
-        <button onClick={() => handleEquipmentTypeClick('legs')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Legs</button>
-        <button onClick={() => handleEquipmentTypeClick('neck')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Neck</button>
-        <button onClick={() => handleEquipmentTypeClick('ring')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Ring</button>
-        <button onClick={() => handleEquipmentTypeClick('shield')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Shield</button>
-        <button onClick={() => handleEquipmentTypeClick('two-handed')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Two-handed</button>
-        <button onClick={() => handleEquipmentTypeClick('weapon')} className="px-4 py-2 bg-gray-800 text-white rounded-lg">Weapon</button>
+        <button onClick={() => handleEquipmentTypeClick('equipments')} className="px-4 py-2 bg-additionalCenterButton text-white rounded-lg hover:bg-secondaryButtonHover">All equipments (hard)</button>     
+        <button onClick={() => handleEquipmentTypeClick('ammunition')} className="px-4 py-2 bg-additionalCenterButton text-white rounded-lg hover:bg-secondaryButtonHover">Ammunition</button>
+        <button onClick={() => handleEquipmentTypeClick('body')} className="px-4 py-2 bg-additionalCenterButton text-white rounded-lg hover:bg-secondaryButtonHover">Body</button>
+        <button onClick={() => handleEquipmentTypeClick('cape')} className="px-4 py-2 bg-additionalCenterButton text-white rounded-lg hover:bg-secondaryButtonHover">Cape</button>
+        <button onClick={() => handleEquipmentTypeClick('feet')} className="px-4 py-2 bg-additionalCenterButton text-white rounded-lg hover:bg-secondaryButtonHover">Feet</button>
+        <button onClick={() => handleEquipmentTypeClick('hands')} className="px-4 py-2 bg-additionalCenterButton text-white rounded-lg hover:bg-secondaryButtonHover">Hands</button>
+        <button onClick={() => handleEquipmentTypeClick('head')} className="px-4 py-2 bg-additionalCenterButton text-white rounded-lg hover:bg-secondaryButtonHover">Head</button>
+        <button onClick={() => handleEquipmentTypeClick('legs')} className="px-4 py-2 bg-additionalCenterButton text-white rounded-lg hover:bg-secondaryButtonHover">Legs</button>
+        <button onClick={() => handleEquipmentTypeClick('neck')} className="px-4 py-2 bg-additionalCenterButton text-white rounded-lg hover:bg-secondaryButtonHover">Neck</button>
+        <button onClick={() => handleEquipmentTypeClick('ring')} className="px-4 py-2 bg-additionalCenterButton text-white rounded-lg hover:bg-secondaryButtonHover">Ring</button>
+        <button onClick={() => handleEquipmentTypeClick('shield')} className="px-4 py-2 bg-additionalCenterButton text-white rounded-lg hover:bg-secondaryButtonHover">Shield</button>
+        <button onClick={() => handleEquipmentTypeClick('two-handed')} className="px-4 py-2 bg-additionalCenterButton text-white rounded-lg hover:bg-secondaryButtonHover">Two-handed</button>
+        <button onClick={() => handleEquipmentTypeClick('weapon')} className="px-4 py-2 bg-additionalCenterButton text-white rounded-lg hover:bg-secondaryButtonHover">Weapon</button>
       </div>
       <div className={`flex flex-row gap-4 transition-transform duration-500 ${showEquipment ? 'translate-y-0' : 'translate-y-[-300%]'}`}>
         {jwtToken ? (
         <button 
-        className='px-4 py-2 bg-lightBrown text-lightGray rounded-lg shadow-lg hover:bg-green-600 transition'
+        className='px-4 py-2 bg-lightGrayButton rounded-lg shadow-lg hover:bg-secondaryButtonHover transition'
         onClick={() => handleLogout()}
         >
           Logout</button>
         ) : (
         <button 
-        className='px-4 py-2 bg-lightBrown text-lightGray rounded-lg shadow-lg hover:bg-green-600 transition'
+        className='px-4 py-2 bg-lightGrayButton rounded-lg shadow-lg hover:bg-secondaryButtonHover transition'
         onClick={() => setIsModalVisible(true)}
         >
           Login</button>
         )
       }
         <button 
-        className='px-4 py-2 bg-lightBrown text-lightGray rounded-lg shadow-lg hover:bg-green-600 transition'
+        className='px-4 py-2 bg-lightGrayButton text-white rounded-lg shadow-lg hover:bg-secondaryButtonHover transition'
         onClick={() => router.push('/highscores')}
         >
           Higscores</button>
       </div>
       {isModalVisible && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-10" onClick={() => setIsModalVisible(false)}>
-          <div className="bg-background flex flex-col items-center p-6 rounded-lg shadow-lg" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-modal flex flex-col items-center p-6 rounded-lg shadow-lg" onClick={(e) => e.stopPropagation()}>
             <h2 className="text-lg font-bold mb-4">Login</h2>
             <input
             value={usernameLoginInput}
@@ -269,18 +269,18 @@ const HomePage: React.FC = () => {
             onChange={handlePasswordLoginInputChange}
             />
             {loginErrorMessage && (
-              <div className="mb-4 text-red-500 animate-pulse">
+              <div className="mb-4 text-missRed animate-pulse">
                 {loginErrorMessage}
               </div>
             )}
             <div className="flex justify-between gap-4">
               <button 
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+              className="px-4 py-2 bg-lightGrayButton text-white rounded-lg hover:bg-secondaryButtonHover"
               onClick={() => handleLogin()}
               >
                 Login</button>
               <button
-              className="px-4 py-2 bg-green-500 text-white rounded-lg"
+              className="px-4 py-2 bg-lightGrayButton text-white rounded-lg hover:bg-secondaryButtonHover"
               onClick={() => (setIsCreateAccountVisible(true), setIsModalVisible(false))}
               >
                 Create Account</button>
@@ -290,7 +290,7 @@ const HomePage: React.FC = () => {
       )}
       {isCreateAccountVisible && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70" onClick={() => setIsCreateAccountVisible(false)}>
-          <div className="bg-background flex flex-col items-center p-6 rounded-lg shadow-lg" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-modal flex flex-col items-center p-6 rounded-lg shadow-lg" onClick={(e) => e.stopPropagation()}>
             <h2 className="text-lg font-bold mb-4">Create Account</h2>
             <input
             value={usernameCreateAccountInput}
@@ -313,13 +313,13 @@ const HomePage: React.FC = () => {
             onChange={handlePassword2CreateAccountInputChange}
             />
             {createAccountErrorMessage && (
-              <div className="mb-4 text-red-500 animate-pulse">
+              <div className="mb-4 text-missRed animate-pulse">
                 {createAccountErrorMessage}
               </div>
             )}
             <div className="flex justify-between gap-4">
               <button
-              className="px-4 py-2 bg-green-500 text-white rounded-lg"
+              className="px-4 py-2 bg-lightGrayButton text-white rounded-lg hover:bg-secondaryButtonHover"
               onClick={() => handleCreateAccount()}
               >Create Account</button>
             </div>

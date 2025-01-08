@@ -131,38 +131,38 @@ const QuestsPage: React.FC = () => {
   };
 
   const findSelectedQuestColorsAndArrows = (quest: Quest) => {
-    let difficultyColorToReturn = 'py-2 border-b border-gray-600 text-center bg-red-500'
-    let idColorToReturn = 'py-2 border-b border-gray-600 text-center bg-red-500'
-    let lengthColorToReturn = 'py-2 border-b border-gray-600 text-center bg-red-500'
-    let nameColorToReturn = 'py-2 border-b border-gray-600 text-center bg-red-500'
-    let questpointsColorToReturn = 'py-2 border-b border-gray-600 text-center bg-red-500'
-    let releasedateColorToReturn = 'py-2 border-b border-gray-600 text-center bg-red-500'
-    let seriesColorToReturn = 'py-2 border-b border-gray-600 text-center bg-red-500'
+    let difficultyColorToReturn = 'py-2 border-b border-gray-600 text-center bg-missRed'
+    let idColorToReturn = 'py-2 border-b border-gray-600 text-center bg-missRed'
+    let lengthColorToReturn = 'py-2 border-b border-gray-600 text-center bg-missRed'
+    let nameColorToReturn = 'py-2 border-b border-gray-600 text-center bg-missRed'
+    let questpointsColorToReturn = 'py-2 border-b border-gray-600 text-center bg-missRed'
+    let releasedateColorToReturn = 'py-2 border-b border-gray-600 text-center bg-missRed'
+    let seriesColorToReturn = 'py-2 border-b border-gray-600 text-center bg-missRed'
     let questPointsArrow = ''
     let releaseDateArrow = ''
     if (quest?.Difficulty === randomQuest?.Difficulty) {
-      difficultyColorToReturn = 'py-2 border-b border-gray-600 text-center bg-green-500'
+      difficultyColorToReturn = 'py-2 border-b border-gray-600 text-center bg-hitGreen'
     }
     if (quest?.ID === randomQuest?.ID) {
-      idColorToReturn = 'py-2 border-b border-gray-600 text-center bg-green-500'
+      idColorToReturn = 'py-2 border-b border-gray-600 text-center bg-hitGreen'
     }
     if (quest?.Length === randomQuest?.Length) {
-      lengthColorToReturn = 'py-2 border-b border-gray-600 text-center bg-green-500'
+      lengthColorToReturn = 'py-2 border-b border-gray-600 text-center bg-hitGreen'
     }
     if (quest?.Name === randomQuest?.Name) {
-      nameColorToReturn = 'py-2 border-b border-gray-600 text-center bg-green-500'
+      nameColorToReturn = 'py-2 border-b border-gray-600 text-center bg-hitGreen'
     }
     if (quest.Series === randomQuest?.Series) {
-      seriesColorToReturn = 'py-2 border-b border-gray-600 text-center bg-green-500'
+      seriesColorToReturn = 'py-2 border-b border-gray-600 text-center bg-hitGreen'
     }
     if (randomQuest) {
       questPointsArrow = quest['Quest Points'] > (randomQuest['Quest Points'] || 0) ? '↓' : quest['Quest Points'] < (randomQuest['Quest Points'] || 0) ? '↑' : '';
       releaseDateArrow = Date.parse(quest['Release Date']) > (Date.parse(randomQuest['Release Date']) || 0) ? '↓' : Date.parse(quest['Release Date']) < (Date.parse(randomQuest['Release Date']) || 0) ? '↑' : '';
       if (quest['Quest Points'] === randomQuest['Quest Points']) {
-        questpointsColorToReturn = 'py-2 border-b border-gray-600 text-center bg-green-500'
+        questpointsColorToReturn = 'py-2 border-b border-gray-600 text-center bg-hitGreen'
       }
       if (quest['Release Date'] === randomQuest['Release Date']) {
-        releasedateColorToReturn = 'py-2 border-b border-gray-600 text-center bg-green-500'
+        releasedateColorToReturn = 'py-2 border-b border-gray-600 text-center bg-hitGreen'
       }
     }
 
@@ -196,16 +196,16 @@ const QuestsPage: React.FC = () => {
   }
   
   return (
-    <div className="flex flex-col items-center min-h-screen text-lightGray p-6 w-full">
+    <div className="flex flex-col items-center min-h-screen text-white p-6 w-full">
       <div className='flex flex-col items-center justify-center w-full '>
-        <h1 className="text-4xl font-bold mb-4" style={{ color: '#E1C12B' }}>
+        <h1 className="text-4xl font-bold mb-4 text-minigameHeader">
           Quests
         </h1>
         <input
             type="text"
             value={userInput}
             onChange={handleInputChange}
-            className="mb-4 px-4 py-2 border rounded-lg bg-gray-800 text-lightGray focus:outline-none"
+            className="mb-4 px-4 py-2 border rounded-lg bg-filterBg text-white focus:outline-none"
             placeholder="Guess the quest name"
           />
       </div>
@@ -216,7 +216,7 @@ const QuestsPage: React.FC = () => {
               <li
                 key={quest.ID}
                 onClick={() => handleQuestSelect(quest)}
-                className="cursor-pointer hover:bg-gray-600 p-2"
+                className="cursor-pointer hover:bg-secondaryButtonHover p-2"
               >
                 {quest.Name}
               </li>
@@ -227,8 +227,8 @@ const QuestsPage: React.FC = () => {
       {selectedQuests.length > 0 && (
         <div className="fixed flex flex-col items-center w-full top-40 z-0 max-h-[62%]">
           <div className="flex flex-col overflow-auto max-h-full w-[85%]">
-            <table className="bg-gray-800 text-lightGray border border-hidden table-auto w-full">
-              <thead className='sticky top-0 bg-gray-800 border-hidden text-sm'>
+            <table className="bg-tableBg text-white border border-hidden table-auto w-full">
+              <thead className='sticky top-0 bg-tableBg border-hidden text-sm'>
               <tr>
                 <th className="py-2 border-b border-gray-600">Name</th>
                 <th className="py-2 border-b border-gray-600">Difficulty</th>
@@ -268,19 +268,19 @@ const QuestsPage: React.FC = () => {
       )}
       {isVictoryPopupVisible && (
       <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70">
-        <div className="bg-gray-800 p-8 rounded-lg shadow-lg text-center">
-          <h2 className="text-3xl font-bold text-lightGray mb-4">
+        <div className="bg-tableBg p-8 rounded-lg shadow-lg text-center">
+          <h2 className="text-3xl font-bold text-white mb-4">
             Congratulations!
           </h2>
-          <p className="text-lg text-lightGray">
+          <p className="text-lg text-white">
             You've guessed the quest correctly!
           </p>
-          <p className="text-lg text-lightGray">
+          <p className="text-lg text-white">
             The quest was {randomQuest?.Name}, released in {randomQuest?.['Release Date']}
           </p>
           <button
             onClick={() => router.push('/monsters')}
-            className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+            className="mt-4 bg-lightGrayButton text-white py-2 px-4 rounded hover:bg-secondaryButtonHover"
           >
             Next
           </button>
@@ -291,7 +291,7 @@ const QuestsPage: React.FC = () => {
         <div>
           <button
             onClick={() => router.push('/')}
-            className="px-6 py-3 bg-darkGreen text-lightGray rounded-lg shadow-lg hover:bg-green-600 transition"
+            className="px-6 py-3 bg-lightGrayButton text-white rounded-lg shadow-lg hover:bg-secondaryButtonHover transition"
           >
             Back
           </button>

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { handleVictory } from '../utils/handleVictory'
 import { checkExistingVictory } from '../utils/checkExistingVictory'
 import { BASE_URL } from '../utils/baseUrl';
-
+import { updateUserSelectedList } from '../utils/updateUserSelectedList';
 
 interface Equipment {
   id: number;
@@ -106,13 +106,19 @@ const EquipmentsPage: React.FC = () => {
       console.log(data2)
       const token = localStorage.getItem('token')
       if (token) {
-        const selectedList = await checkExistingVictory(token, 'equipments')
-        console.log(selectedList)
-        if (selectedList === '' || selectedList === undefined) {
-          return
+        const listAndBooleanVictory = await checkExistingVictory(token, 'equipments')
+        if (listAndBooleanVictory){
+          const selectedList = listAndBooleanVictory.selected_list
+          const victory = listAndBooleanVictory.victory
+  
+          if (victory === true) {
+            setIsVictoryPopupVisible(true)
+          }
+          if (selectedList === '' || selectedList === undefined) {
+            return
+          }
+          typeof selectedList === 'object' && setSelectedEquipments(selectedList)
         }
-        setIsVictoryPopupVisible(true)
-        typeof selectedList === 'object' && setSelectedEquipments(selectedList)
       }
     } catch (error) {
       console.error('Erro ao buscar equipamentos:', error);
@@ -159,7 +165,13 @@ const EquipmentsPage: React.FC = () => {
           const arrayToPassToApi = [...selectedEquipments]
           arrayToPassToApi.push(equipmentToAdd)
           await handleVictory(arrayToPassToApi, jwtToken, 'equipments')
+          return
         }
+    }
+    if (jwtToken !== '') {
+      const addToUserSelected = [...selectedEquipments]
+      addToUserSelected.push(equipmentToAdd)
+      await updateUserSelectedList(jwtToken, 'feet', addToUserSelected)
     }
     // checks hints
     else if (selectedEquipments.length > 10 && selectedEquipments.length < 20) {
@@ -205,9 +217,9 @@ const EquipmentsPage: React.FC = () => {
       setIsThirdHintPopupVisible(true)
     }
 
-    const red = 'py-2 border-b border-gray-600 text-center bg-red-500'
-    const green = 'py-2 border-b border-gray-600 text-center bg-green-500'
-    const orange = 'py-2 border-b border-gray-600 text-center bg-orange-500'
+    const red = 'py-2 border-b border-gray-600 text-center bg-missRed'
+    const green = 'py-2 border-b border-gray-600 text-center bg-hitGreen'
+    const orange = 'py-2 border-b border-gray-600 text-center bg-semiHitHorange'
 
     const findSelectedEquipmentColorsAndArrows = (equipment: Equipment) => {
 
@@ -234,7 +246,7 @@ const EquipmentsPage: React.FC = () => {
         const equipmentNameWords = equipment.equipment_name.split('(')[0]
         const onlyEquipmentNameWords = equipmentNameWords.split(' ').filter(m => m !== '')
         onlyEquipmentNameWords.map(word => {
-            if (randomEquipment && randomEquipment.equipment_name.includes(word.toLowerCase()) && equipmentNameColorToReturn === red) {
+            if (randomEquipment && randomEquipment.equipment_name.toLowerCase().includes(word.toLowerCase()) && equipmentNameColorToReturn === red) {
                 equipmentNameColorToReturn = orange
             }
         })
@@ -329,16 +341,16 @@ const EquipmentsPage: React.FC = () => {
     }
     
     return (
-      <div className="flex flex-col items-center min-h-screen text-lightGray p-6 w-full">
+      <div className="flex flex-col items-center min-h-screen text-white p-6 w-full">
         <div className='flex flex-col items-center justify-center w-full '>
-          <h1 className="text-4xl font-bold mb-4" style={{ color: '#E1C12B' }}>
+          <h1 className="text-4xl font-bold mb-4 text-minigameHeader">
             Equipments
           </h1>
           <input
               type="text"
               value={userInput}
               onChange={handleInputChange}
-              className="mb-4 px-4 py-2 border rounded-lg bg-gray-800 text-lightGray focus:outline-none"
+              className="mb-4 px-4 py-2 border rounded-lg bg-filterBg text-white focus:outline-none"
               placeholder="Guess the equipment name"
             />
         </div>
@@ -349,7 +361,7 @@ const EquipmentsPage: React.FC = () => {
                 <li
                   key={equipment.id}
                   onClick={() => handleEquipmentSelect(equipment)}
-                  className="cursor-pointer hover:bg-gray-600 p-2"
+                  className="cursor-pointer hover:bg-secondaryButtonHover p-2"
                 >
                   {equipment.equipment_name}
                 </li>
@@ -360,8 +372,8 @@ const EquipmentsPage: React.FC = () => {
         {selectedEquipments.length > 0 && (
         <div className="fixed flex flex-col items-center w-full top-40 z-0 max-h-[62%]">
           <div className="flex flex-col overflow-auto max-h-full w-[85%]">
-            <table className="bg-gray-800 text-lightGray border border-hidden table-auto w-full">
-              <thead className='sticky top-0 bg-gray-800 border-hidden text-sm'>
+            <table className="bg-tableBg text-white border border-hidden table-auto w-full">
+              <thead className='sticky top-0 bg-tableBg border-hidden text-sm'>
                 <tr>
                   <th className="py-2 border-b border-gray-600">Image</th>
                   <th className="py-2 border-b border-gray-600">Name</th>
@@ -517,19 +529,19 @@ const EquipmentsPage: React.FC = () => {
         )}
         {isVictoryPopupVisible && (
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70 z-20">
-          <div className="bg-gray-800 p-8 rounded-lg shadow-lg text-center">
-            <h2 className="text-3xl font-bold text-lightGray mb-4">
+          <div className="bg-tableBg p-8 rounded-lg shadow-lg text-center">
+            <h2 className="text-3xl font-bold text-white mb-4">
               Congratulations!
             </h2>
-            <p className="text-lg text-lightGray">
+            <p className="text-lg text-white">
               You've guessed the equipment correctly!
             </p>
-            <p className="text-lg text-lightGray">
+            <p className="text-lg text-white">
               The equipment was {randomEquipment?.equipment_name}
             </p>
             <button
               onClick={() => router.push('/')}
-              className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+              className="mt-4 bg-lightGrayButton text-white py-2 px-4 rounded hover:bg-secondaryButtonHover"
             >
               Finish
             </button>
@@ -538,16 +550,16 @@ const EquipmentsPage: React.FC = () => {
       )}
         {isFirstHintPopupVisible && (
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70 z-20">
-          <div className="bg-gray-800 p-8 rounded-lg shadow-lg text-center">
-            <h2 className="text-3xl font-bold text-lightGray mb-4">
+          <div className="bg-tableBg p-8 rounded-lg shadow-lg text-center">
+            <h2 className="text-3xl font-bold text-white mb-4">
               The hint is
             </h2>
-            <p className="text-lg text-lightGray">
+            <p className="text-lg text-white">
               {firstHint}
             </p>
             <button
               onClick={() => setIsFirstHintPopupVisible(false)}
-              className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+              className="mt-4 bg-lightGrayButton text-white py-2 px-4 rounded hover:bg-secondaryButtonHover"
             >
               Close
             </button>
@@ -556,16 +568,16 @@ const EquipmentsPage: React.FC = () => {
       )}
         {isSecondHintPopupVisible && (
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70 z-20">
-          <div className="bg-gray-800 p-8 rounded-lg shadow-lg text-center">
-            <h2 className="text-3xl font-bold text-lightGray mb-4">
+          <div className="bg-tableBg p-8 rounded-lg shadow-lg text-center">
+            <h2 className="text-3xl font-bold text-white mb-4">
               The hint is
             </h2>
-            <p className="text-lg text-lightGray">
+            <p className="text-lg text-white">
               {secondHint}
             </p>
             <button
               onClick={() => setIsSecondHintPopupVisible(false)}
-              className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+              className="mt-4 bg-lightGrayButton text-white py-2 px-4 rounded hover:bg-secondaryButtonHover"
             >
               Close
             </button>
@@ -574,16 +586,16 @@ const EquipmentsPage: React.FC = () => {
       )}
         {isThirdHintPopupVisible && (
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70 z-20">
-          <div className="bg-gray-800 p-8 rounded-lg shadow-lg text-center">
-            <h2 className="text-3xl font-bold text-lightGray mb-4">
+          <div className="bg-tableBg p-8 rounded-lg shadow-lg text-center">
+            <h2 className="text-3xl font-bold text-white mb-4">
               The hint is
             </h2>
-            <p className="text-lg text-lightGray">
+            <p className="text-lg text-white">
               {thirdHint}
             </p>
             <button
               onClick={() => setIsThirdHintPopupVisible(false)}
-              className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+              className="mt-4 bg-lightGrayButton text-white py-2 px-4 rounded hover:bg-secondaryButtonHover"
             >
               Close
             </button>
@@ -594,7 +606,7 @@ const EquipmentsPage: React.FC = () => {
           <div>
             <button
               onClick={() => router.push('/')}
-              className="px-6 py-3 bg-darkGreen text-lightGray rounded-lg shadow-lg hover:bg-green-600 transition"
+              className="px-6 py-3 bg-lightGrayButton text-white rounded-lg shadow-lg hover:bg-secondaryButtonHover transition"
             >
               Back
             </button>
@@ -603,7 +615,7 @@ const EquipmentsPage: React.FC = () => {
           <div>
             <button
               onClick={() => getFirstHint()}
-              className="px-6 py-3 bg-darkGreen text-lightGray rounded-lg shadow-lg hover:bg-green-600 transition"
+              className="px-6 py-3 bg-lightGrayButton text-white rounded-lg shadow-lg hover:bg-secondaryButtonHover transition"
             >
               Hint 1
             </button>
@@ -613,7 +625,7 @@ const EquipmentsPage: React.FC = () => {
           <div>
             <button
               onClick={() => getSecondHint()}
-              className="px-6 py-3 bg-darkGreen text-lightGray rounded-lg shadow-lg hover:bg-green-600 transition"
+              className="px-6 py-3 bg-lightGrayButton text-white rounded-lg shadow-lg hover:bg-secondaryButtonHover transition"
             >
               Hint 2
             </button>
@@ -623,7 +635,7 @@ const EquipmentsPage: React.FC = () => {
           <div>
             <button
               onClick={() => getThirdHint()}
-              className="px-6 py-3 bg-darkGreen text-lightGray rounded-lg shadow-lg hover:bg-green-600 transition"
+              className="px-6 py-3 bg-lightGrayButton text-white rounded-lg shadow-lg hover:bg-secondaryButtonHover transition"
             >
               Hint 3
             </button>
